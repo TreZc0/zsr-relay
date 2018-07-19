@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!-- Load Polymer core -->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/lib/mixins/mutable-data.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/nodecg-replicant/nodecg-replicant.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
+<link rel="import" href="../../../shared/style/gdq-text-styles.html">
+
+<!-- Define element -->
+<dom-module id="tournament-results">
+	<template>
+		<style include="gdq-text-styles">
+			:host {
+				position: relative;
+				width: 100%;
+				display: block;
+				background: transparent;
+				justify-content: space-around;
+				align-items: center;
+				margin-top: 0px;
+				width: 100%;
+				height: 520px;
+				overflow: hidden;
+				box-sizing: content-box;
+				font-family: sans-serif;
+				font-style: normal;
+				font-weight: normal;
+				color: #ddab54;
+				box-shadow: 0 -2px 8px -1px black, 0 2px 8px -1px black;
+				font-variant: normal;
+				
+			}
+			
+			vaadin-grid#rounded-rows {
+				font: 300 14px "Helvetica Neue", sans-serif;
+				background: transparent;
+				color: white;
+				height: auto !important;
+				overflow-y: hidden !important;
+				border: none;
+				padding: 8px;
+				--divider-color: #ddab54;
+				
+				--vaadin-grid-cell: {
+					  background: black;
+					};
+				--vaadin-grid-stream-cell: {
+					  z-index: 40;
+					  color: #ddab54;
+
+					};
+				--vaadin-grid-header-cell: {
+					  text-transform: uppercase;
+					  font-weight: 800;
+
+					};
+				--vaadin-grid-focused-cell: {
+					  box-shadow: none;
+					  font-weight: bold;
+					  padding-left:100px;
+					};
+			}
+
+				vaadin-grid#rounded-rows .bodycell {
+					padding: 16px;
+					background: black;
+					border-top: 1px solid rgb(105, 118, 132);
+					border-bottom: 1px solid rgb(105, 118, 132);
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+
+				vaadin-grid#rounded-rows .left {
+					border-left: 1px solid rgb(105, 118, 132);
+					border-radius: 3px 0 0 3px;
+					margin-left: 8px;
+				}
+
+				vaadin-grid#rounded-rows .right {
+					margin-right: 8px;
+					border-right: 1px solid rgb(105, 118, 132);
+					border-radius: 0 3px 3px 0;
+				}
+			
+			a {
+				color: #ddab54;
+			}
+			#title, #date {
+				display: block;
+				margin-left: auto;
+				margin-left: auto;
+				text-align: center;
+				font-size:32px;
+				font-family: sans-serif;
+				color: white;
+				font-weight: 800;
+			}
+			#subtitle {
+				display: block;
+				margin-left: auto;
+				margin-left: auto;
+				text-align: center;
+				font-size: 20px;
+				font-family: sans-serif;
+				color: white;
+				font-weight: 800;
+			}
+			#date {
+				font-size: 18px;
+			}
+			#title {
+				margin-top: 12px;
+			}
+			#sub {
+				display: block;
+				margin-left: auto;
+				margin-left: auto;
+				text-align: center;
+				font-size: 16px;
+				font-weight: 600;
+				color: #ddab54;
+				margin-bottom: 5px;
+			}
+		</style>
+<div id="title">Game - Category</div>
+<div id="subtitle">Round</div>
+<div id="sub">6 races - participate in at least 3 to be eligible for the playoffs. The 3 best races are taken to calculate your run delta.</div>
+
+
+
+		<!-- Fetch an array of users to be shown in the grid -->
+
+		 <!-- The array is set as the <vaadin-grid>'s "items" property -->
+			<vaadin-grid id="rounded-rows" aria-label="Basic Binding Example" items="[[resultList]]">
+
+				<vaadin-grid-column width="50px" flex-grow="0">
+					<template class="header">
+						#
+					</template>
+					<template>
+						[[item.place]]
+					</template>
+				</vaadin-grid-column>
+	
+				<vaadin-grid-column>
+					<template class="header">
+						<span draggable="false">
+							Nickname
+						</span>
+					</template>
+					<template class="name">
+						<span style="font-weight:600;" draggable="false">
+							[[item.name]]
+						</span>
+					</template>
+				</vaadin-grid-column>
+				<vaadin-grid-column>
+					<template class="header">
+						Twitch
+					</template>
+					<template id="stream">
+						<a href="https://twitch.tv/[[item.stream]]" target="_blank">[[item.stream]]</a>
+					</template>
+				</vaadin-grid-column>
+				<vaadin-grid-column>
+					<template class="header">
+						Status
+					</template>
+					<template>
+						[[item.status]]
+					</template>
+				</vaadin-grid-column>
+				<vaadin-grid-column>
+					<template class="header">
+						Time
+					</template>
+					<template>
+						[[item.timeFormat]]
+					</template>
+				</vaadin-grid-column>
+	
+			</vaadin-grid>
+
+	</template>
+	<script src="tournament-results.js"></script>
+
+</dom-module>
+

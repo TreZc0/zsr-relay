@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<!-- Load Polymer core -->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/polymer/lib/mixins/mutable-data.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/nodecg-replicant/nodecg-replicant.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
+<link rel="import" href="../../../bower_components/vaadin-grid/vaadin-grid-column-group.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<!-- Define element -->
+<dom-module id="tournament-standings">
+	<template>
+		<style>
+			:host {
+				position: absolute;
+				width: 100%;
+				height: 400px;
+				display: block;
+				justify-content: space-around;
+				align-items: center;
+				overflow: hidden;
+				font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+				font-style: normal;
+				font-weight: normal;
+				font-variant: normal;
+				background-color: #111310;			
+			}
+			
+			vaadin-grid#master {
+				font: 300 14px "Helvetica Neue", sans-serif;
+				color: #ddab54;
+				height: auto;
+				overflow-y: hidden !important;
+				border: none;
+				background-color: #111310;
+				padding: 8px;
+				--vaadin-grid-cell: {
+					  background-image: url(../../img/bg.png);
+					  margin-top: 20px;
+					  font-weight: 800;
+					  font-size: 1.5vw;
+					  overflow: visible;
+					  white-space: normal;
+					};
+			}
+
+
+			vaadin-grid#rounded-rows .right {
+				margin-right: 8px;
+				border-right: 1px solid rgb(105, 118, 132);
+				border-radius: 0 3px 3px 0;
+			}
+			
+			vaadin-grid#rounded-rows {
+				font: 300 14px "Helvetica Neue", sans-serif;
+				color: white;
+				width: 100%;
+				height: auto !important;
+				overflow-y: hidden !important;
+				border: 3px solid #ddab54;
+				background-image: url(../../img/bg.png);
+				padding: 5px;
+				
+				
+				--vaadin-grid-cell: {
+					  background: black;
+					  margin-top: -8px;
+					};
+				--vaadin-grid-stream-cell: {
+					  z-index: 40;
+					  color: red;
+
+					};
+				--vaadin-grid-header-cell: {
+					  text-transform: uppercase;
+					  font-weight: 800;
+
+					};
+				--vaadin-grid-focused-cell: {
+					  box-shadow: none;
+					  font-weight: bold;
+					  padding-left:100px;
+					};
+				--vaadin-grid-column-group {
+						background-color: red;
+					};
+			}
+
+			vaadin-grid#rounded-rows .bodycell {
+				padding: 16px;
+				background: #111310;
+				border-top: 1px solid rgb(105, 118, 132);
+				border-bottom: 1px solid rgb(105, 118, 132);
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			vaadin-grid#rounded-rows .left {
+				border-left: 1px solid rgb(105, 118, 132);
+				border-radius: 3px 0 0 3px;
+				margin-left: 8px;
+			}
+
+			vaadin-grid#rounded-rows .right {
+				margin-right: 8px;
+				border-right: 1px solid rgb(105, 118, 132);
+				border-radius: 0 3px 3px 0;
+			}
+			
+			a {
+				color: #ddab54;
+			}
+			#pages {
+				display: flex;
+				flex-wrap: wrap;
+				 margin: 0 auto;
+				
+			}
+
+			  #pages > button {
+				user-select: none;
+				padding: 5px;
+				margin: 0 5px;
+				border-radius: 10%;
+				border: 0;
+				background: transparent;
+				outline: none;
+				cursor: pointer;
+				font: inherit;
+				color: white;
+				font-size: 20px;
+				font-weight: 800;
+
+			}
+
+			  #pages > button:hover {
+				color: var(--default-primary-color);
+				background-color: #eee;
+			}
+
+			  #pages > button[selected] {
+				font-weight: 800;
+				color: #ddab54;
+				background-color: var(--default-primary-color);
+			}
+
+			
+		</style>
+	 <div id="pages">
+      <button on-click="_prev">&lt;</button>
+      <template is="dom-repeat" items="[[pages]]">
+        <button on-click="_select" selected$="[[_isSelected(page, item)]]">[[item]]</button>
+      </template>
+      <button on-click="_next">&gt;</button>
+    </div>
+		<!-- Fetch an array of users to be shown in the grid -->
+		 <x-array-data-provider items="{{items}}"></x-array-data-provider>
+		 <!-- The array is set as the <vaadin-grid>'s "items" property -->
+		<vaadin-grid id="master" page-size="6">
+			<vaadin-grid-column width="10%" flex-grow="0">
+				<template class="stream">
+					<img src="img/logo/[[item.shortName]].png" width="95%">
+				</template>
+			</vaadin-grid-column>
+			<vaadin-grid-column width="15%" flex-grow="0">
+				<template class="stream">
+					<span>
+						[[item.category]]
+					</span>
+				</template>
+			</vaadin-grid-column>
+			<vaadin-grid-column>
+			<template id="header">
+		<vaadin-grid id="rounded-rows" items="[[item.standings]]">
+			<vaadin-grid-column width="6%" flex-grow="0">
+				<template class="header">
+					<span draggable="false">
+						#
+					</span>
+				</template>
+				<template class="content">
+					<span style="font-weight:600;" draggable="false">
+						[[item.place]]
+					</span>
+				</template>
+			</vaadin-grid-column>
+			<vaadin-grid-column>
+				<template class="header">
+					<span draggable="false">
+						Nickname
+					</span>
+				</template>
+				<template class="content">
+					<span style="font-weight:600;" draggable="false">
+						[[item.name]]
+					</span>
+				</template>
+			</vaadin-grid-column>
+			<vaadin-grid-column>
+				<template class="header">
+					Twitch
+				</template>
+				<template id="content">
+					<a href="https://twitch.tv/[[item.stream]]" target="_blank">[[item.stream]]</a>
+				</template>
+			</vaadin-grid-column>
+			<vaadin-grid-column>
+				<template class="header">
+					1st Time
+				</template>
+				<template id="content">
+					[[item.times.0.timeFormat]]
+				</template>
+			</vaadin-grid-column>
+			<vaadin-grid-column>
+				<template class="header">
+					2nd Time
+				</template>
+				<template id="content">
+					[[item.times.1.timeFormat]]
+				</template>
+			</vaadin-grid-column>
+			<vaadin-grid-column>
+				<template class="header">
+					3rd Time
+				</template>
+				<template id="content">
+					[[item.times.2.timeFormat]]
+				</template>
+			</vaadin-grid-column>
+			<vaadin-grid-column>
+				<template class="header">
+					Delta
+				</template>
+				<template id="content">
+					[[item.deltaFormat]]
+				</template>
+				</vaadin-grid-column>
+				</vaadin-grid></template>
+			</vaadin-grid-column>
+		</vaadin-grid>
+
+	</template>
+<script src="tournament-standings.js"></script> 
+</dom-module>
+

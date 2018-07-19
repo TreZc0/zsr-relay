@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Interview</title>
+	<link rel="stylesheet" href="style/layoutiv.css">
+	<link rel="import" href="../shared/imports/gsap.html">
+    <link rel="import" href="elements/zsr-break-music/zsr-break-music.html">
+	<link rel="import" href="elements/interview-discord-panel/interview-discord-panel.html">
+	<link rel="import" href="elements/tournament-standings/tournament-standings.html">
+	<link rel="import" href="elements/tournament-results/tournament-results.html">
+    <link rel="stylesheet" href="../bower_components/lato-font/css/lato-font.css">
+	<link rel="stylesheet" href="style/font/Triforce.css">
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+
+	<custom-style>
+		<style>
+            #bingo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            }
+            #title {
+            font-family: 'Lato';
+            font-size: 56px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 11px;
+            margin-bottom: 30px;
+            color: white;
+            }
+
+            #results {
+				position: absolute;
+				top: 0px;
+				left: -125px;
+                width: 70%;
+				height: 550px;
+				z-index: 1;
+                transform: scale(0.7);
+                overflow:hidden;
+            }
+			#standings {
+				position: absolute;
+				top: 0px;
+				right: -125px;
+                width: 70%;
+				height: 550px;
+				z-index: 1;
+                transform: scale(0.7);
+                overflow:hidden;
+            }
+			#logo {
+				position: absolute;
+				top: 30px;
+				left: 382px;
+				transform: scale(0.7);
+				z-index: 1;
+			}
+
+
+			interview-discord-panel {
+				position: absolute; 
+				left: 5px; 
+				bottom: 67px;
+				z-index: 10
+			}
+            #game {
+				position: absolute;
+				top: 267px;
+				display: flex;
+				justify-content: center;
+				height: 200px;
+				z-index: 1;
+			}
+			tournament-results {
+				top: -48px;
+				border: 0;
+				transform: scale(0.95);
+				
+			}
+		</style>
+	</custom-style>
+</head>
+<body>
+
+ <zsr-break-music></zsr-break-music>
+
+<div id="container">
+    <img id="background" src="img/backgrounds/interview_bg.png">
+
+	<p id="Title">Interview with the Runners</p>	
+	<tournament-results style="overflow: hidden"></tournament-results>
+	<!--	<tournament-standings></tournament-standings>-->
+    <interview-discord-panel tablewidth="1240" rowWidth="1220" columnsperline="8"></interview-discord-panel>
+</div>
+
+
+ <script>
+    const currentRun = nodecg.Replicant('currentRun');
+	window.addEventListener('DOMContentLoaded', () => {
+		TweenLite.to(document.body, 0.333, {
+			opacity: 1,
+			ease: Power1.easeOut
+		});
+    });
+</script>
+</body>
+</html>

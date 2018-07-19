@@ -1,0 +1,106 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../shared/style/zsr-text-styles.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-badge/paper-badge.html">
+<link rel="stylesheet" href="/bower_components/lato-font/css/lato-font.css">
+<link rel="import" href="../gdq-stepped-gradient-text/gdq-stepped-gradient-text.html">
+<link rel="import" href="../../../bower_components/polymer/lib/mixins/mutable-data.html">
+<link rel="import" href="../../../shared/style/zsr-input-style.html">
+<link rel="import" href="../../../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../../../bower_components/sc-fitted-text/sc-fitted-text.html">
+<link rel="stylesheet" href="../../../bower_components/lato-font/css/lato-font.css">
+<dom-module id="interview-discord-panel">
+	<template>
+		<style include="zsr-input-style">
+			:host {
+				position: absolute;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+				white-space: nowrap;
+				color: black;
+				font-family: Lato;
+			}
+			.fitted {
+				display: flex;
+  				align-items: center;
+				justify-content: center;
+				text-align: center;
+				z-index: 2;
+				color: white; /* For Browser Test */
+				font-weight: bold;
+				margin-top: 2px;
+				font-size: 20px;
+				margin-left: -2px;
+			}
+			.badge {
+				--paper-badge-background: #0b3252;
+				--paper-badge-width: 25px;
+				--paper-badge-height: 25px;
+				--paper-badge-icon-width: 25px;
+				--paper-badge-icon-height: 25px;
+				position: relative;
+				top:-79px;
+				left: 65px;
+				
+			}
+			.container {
+				display: table;
+				margin-bottom: -55px;
+				margin-right: 30px;
+				justify-content: center;
+				text-align: center;
+				width: 150px;
+			}
+			#box {
+				background:#0b3252;
+				position: absolute;
+				top: 42px;
+				transform: skew(215deg);
+				z-index:0;
+				width: 128px;
+				height: 50px;
+			}
+
+			.role {
+				font-family: "Lato Thin";
+				font-style: italic;
+				margin-left: 21px;
+				position: absolute;
+				top: 69px;
+				z-index: 2;
+				color: white;
+			}
+			table {
+				padding-left: 10px;
+				padding-right: 10px;
+			}
+
+			.avatar {
+				border-radius: 100%; 
+				display: block;
+				margin-left: 36px;
+			}
+		</style>
+		<table>
+		<template is="dom-repeat" items="[[speakerLines]]" mutable-data>
+		<tr>
+			<template is="dom-repeat" items="[[item]]" mutable-data>
+				<td id="td_[[item.id]]">
+				<div id="container_[[item.id]]" class="container" tabindex="0" on-click="{{swaprole}}"> 
+					<div class="box" id="box"></div>
+					<img class="avatar" id="avatar_[[item.id]" src="[[item.avatar]]" height="40" width="40">
+					<sc-fitted-text align="center" class="fitted" id="name_[[item.id]]" text="[[item.name]]" max-width="125"></sc-fitted-text>
+					<div class="role" id="role_[[item.id]]">Commentator</div>
+					<paper-badge class="badge" id="mic_[[item.id]]" style="visibility:hidden" icon="av:mic" for="avatar_[[item.id]]"></paper-badge>
+				</div></td>
+			</template></tr>
+		</template></table>
+
+		
+	</template>
+
+	<script src="interview-discord-panel.js"></script>
+</dom-module>

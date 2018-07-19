@@ -1,0 +1,474 @@
+{
+  "raceCount": 7,
+  "results": [
+    {
+      "name": "Breath of the Wild",
+      "shortName": "BotW",
+      "longName": "The Legend of Zelda: Breath of the Wild",
+      "category": "Master Sword RTA",
+      "date": "2017-07-07T17:00:00Z",
+      "rankings": [
+        {
+          "name":"iden",
+          "stream":"iden1",
+          "status":"Finished",
+          "place":1,
+          "time":7878,"timeFormat":"2:11:18"
+        },
+        {
+          "name":"MrPop1",
+          "stream":"mrpop1",
+          "status":"Finished",
+          "place":2,"time":8367,
+          "timeFormat":"2:19:27"
+        },
+        {
+          "name":"LouLouCore",
+          "stream":"louloucore",
+          "status":"Finished",
+          "place":3,
+          "time":8551,
+          "timeFormat":"2:22:31"
+        },
+        {
+          "name":"Wolhaiksong",
+          "stream":"wolhaiksong19",
+          "status":"Finished",
+          "place":4,
+          "time":8893,
+          "timeFormat":"2:28:13"
+        },
+        {
+          "name":"id9000",
+          "stream":"id9000",
+          "status":"Finished",
+          "place":5,
+          "time":8914,
+          "timeFormat":"2:28:34"
+        },
+        {
+          "name":"lepelog",
+          "stream":"lepelog",
+          "status":"Finished",
+          "place":6,
+          "time":8962,
+          "timeFormat":"2:29:22"
+        },
+        {
+          "name":"KaoPyro",
+          "stream":"kaopyro",
+          "status":"Finished",
+          "place":7,
+          "time":9053,
+          "timeFormat":"2:30:53"
+        },
+        {
+          "name":"Sigmaphied",
+          "stream":"sigmaphied",
+          "status":"Finished",
+          "place":8,
+          "time":9563,
+          "timeFormat":"2:39:23"
+        },
+        {
+          "name":"rekyuu",
+          "stream":"rekyuus",
+          "status":"Finished",
+          "place":9,
+          "time":10469,
+          "timeFormat":"2:54:29"
+        }
+      ]
+    },
+    {
+      "name": "Ocarina of Time AGDQ Special",
+      "shortName": "OoT",
+      "longName": "The Legend of Zelda: Ocarina of Time - AGDQ18 Special",
+      "category": "100% Relay Race",
+      "date": "2017-01-13T16:00:00Z",
+      "rankings": [
+        {
+          "name": "Team New Route",
+          "stream": "",
+          "status": "Finished",
+          "place": 1,
+          "time": 17500,
+          "timeFormat": "4:58:38"
+        },
+        {
+          "name": "Team Old Route",
+          "stream": "",
+          "status": "Finished",
+          "place": 2,
+          "time": 21000,
+          "timeFormat": "5:55:39"
+        }
+      ]
+    },
+    {
+      "name": "Ocarina of Time",
+      "shortName": "OoT",
+      "longName": "The Legend of Zelda: Ocarina of Time",
+      "category": "100%",
+      "date": "2017-12-30T19:00:00Z",
+      "rankings": [
+        {
+          "name": "Aliens",
+          "stream": "aliens",
+          "status": "Finished",
+          "place": 1,
+          "time": 15860,
+          "timeFormat": "4:24:20"
+        },
+        {
+          "name": "zfg",
+          "stream": "zfg1",
+          "status": "Finished",
+          "place": 2,
+          "time": 16079,
+          "timeFormat": "4:27:59"
+        },
+        {
+          "name": "Fig",
+          "stream": "fig02",
+          "status": "Finished",
+          "place": 3,
+          "time": 16915,
+          "timeFormat": "4:41:55"
+        },
+        {
+          "name": "dannyb21892",
+          "stream": "dannyb21892",
+          "status": "Finished",
+          "place": 4,
+          "time": 17942,
+          "timeFormat": "4:59:02"
+        },
+        {
+          "name": "juwk",
+          "stream": "mistery",
+          "status": "Finished",
+          "place": 5,
+          "time": 19326,
+          "timeFormat": "5:22:06"
+        },
+        {
+          "name": "tsundere_rar",
+          "stream": "tsundere_dropout",
+          "status": "Finished",
+          "place": 6,
+          "time": 20082,
+          "timeFormat": "5:32:03"
+        },
+        {
+          "name": "Rosewater",
+          "stream": "rosewater",
+          "status": "Finished",
+          "place": 7,
+          "time": 20569,
+          "timeFormat": "5:42:49"
+        },
+        {
+          "name": "Fenyan",
+          "stream": "fenyan",
+          "status": "Finished",
+          "place": 8,
+          "time": 24425,
+          "timeFormat": "6:47:05"
+        },
+        {
+          "name": "WTHH",
+          "stream": "whatthehellshappened",
+          "status": "Forfeit",
+          "place": "-",
+          "timeFormat": ""
+        },
+        {
+          "name": "Glitchymon",
+          "stream": "glitchymon",
+          "status": "Forfeit",
+          "place": "-",
+          "timeFormat": ""
+        },
+        {
+          "name": "Ostrealava02",
+          "stream": "ostrealava02",
+          "status": "Forfeit",
+          "place": "-",
+          "timeFormat": ""
+        },
+        {
+          "name": "Paracusia",
+          "stream": "paracusia",
+          "status": "Forfeit",
+          "place": "-",
+          "timeFormat": ""
+        },
+        {
+          "name": "FoxyToaster",
+          "stream": "foxytoaster",
+          "status": "Forfeit",
+          "place": "-",
+          "timeFormat": ""
+        },
+        {
+          "name": "TheCowness",
+          "stream": "thecowness",
+          "status": "Forfeit",
+          "place": "-",
+          "timeFormat": ""
+        }
+      ]
+    },
+    {
+      "name": "Twilight Princess",
+      "shortName": "TP",
+      "longName": "The Legend of Zelda: Twilight Princess",
+      "category": "All Dungeons",
+      "date": "2017-12-16T21:00:00Z",
+      "rankings": [
+        {
+          "name": "Adam",
+          "stream": "giradam",
+          "status": "Finished",
+          "place": 1,
+          "time": 14226,
+          "timeFormat": "3:57:06"
+        },
+        {
+          "name": "Kejsmaster",
+          "stream": "kejsmaster",
+          "status": "Finished",
+          "place": 2,
+          "time": 14489,
+          "timeFormat": "4:01:29"
+        },
+        {
+          "name": "Aether",
+          "stream": "hastyaether",
+          "status": "Finished",
+          "place": 3,
+          "time": 14989,
+          "timeFormat": "4:09:49"
+        },
+        {
+          "name": "Taka",
+          "stream": "takarikka",
+          "status": "Finished",
+          "place": 4,
+          "time": 15116,
+          "timeFormat": "4:11:56"
+        },
+        {
+          "name": "Skyreon",
+          "stream": "skyreon",
+          "status": "Finished",
+          "place": 5,
+          "time": 15246,
+          "timeFormat": "4:14:06"
+        },
+        {
+          "name": "Ace",
+          "stream": "chaotic_ace",
+          "status": "Finished",
+          "place": 6,
+          "time": 15251,
+          "timeFormat": "4:14:11"
+        },
+        {
+          "name": "Zayloox",
+          "stream": "zayloox_",
+          "status": "Finished",
+          "place": 7,
+          "time": 15884,
+          "timeFormat": "4:24:44"
+        },
+        {
+          "name": "Jacquaid",
+          "stream": "jacquaid",
+          "status": "Finished",
+          "place": 8,
+          "time": 17095,
+          "timeFormat": "4:44:55"
+        },
+        {
+          "name": "420XX",
+          "stream": "bighairyfart",
+          "status": "Finished",
+          "place": 9,
+          "time": 17297,
+          "timeFormat": "4:48:17"
+        },
+        {
+          "name": "Habreno",
+          "stream": "habreno",
+          "status": "Finished",
+          "place": 10,
+          "time": 19177,
+          "timeFormat": "5:19:37"
+        },
+        {
+          "name": "emilybrooks",
+          "stream": "emilybrooks",
+          "status": "Finished",
+          "place": 11,
+          "time": 19455,
+          "timeFormat": "5:24:15"
+        },
+        {
+          "name": "Justin | Monado",
+          "stream": "monadopurge",
+          "status": "Forfeit",
+          "place": "-",
+          "timeFormat": ""
+        },
+        {
+          "name": "Torp",
+          "stream": "yellowtorpedo",
+          "status": "Forfeit",
+          "place": "-",
+          "timeFormat": ""
+        }
+      ]
+    },
+    {
+      "name": "The Wind Waker HD",
+      "shortName": "TWWHD",
+      "longName": "The Legend of Zelda: The Wind Waker HD",
+      "category": "All Dungeons",
+      "date": "2017-11-25T23:00:00Z",
+      "rankings": [
+        {
+          "name": "IMtendo",
+          "stream": "imtendo",
+          "status": "Finished",
+          "place": 1,
+          "time": 11177,
+          "timeFormat": "03:06:17"
+        },
+        {
+          "name": "Chimera",
+          "stream": "chimerasr",
+          "status": "Finished",
+          "place": 2,
+          "time": 11405,
+          "timeFormat": "03:10:05"
+        },
+        {
+          "name": "mance2015",
+          "stream": "mance2325",
+          "status": "Finished",
+          "place": 3,
+          "time": 11964,
+          "timeFormat": "03:19:24"
+        },
+        {
+          "name": "Rasen",
+          "stream": "rasenurns",
+          "status": "Finished",
+          "place": 4,
+          "time": 14670,
+          "timeFormat": "04:04:30"
+        }
+      ]
+    },
+    {
+      "name": "A Link Between Worlds",
+      "shortName": "ALBW",
+      "longName": "The Legend of Zelda: A Link Between Worlds",
+      "category": "Any%",
+      "date": "2017-11-22T23:00:00Z",
+      "rankings": [
+        {
+          "name": "romulostx",
+          "stream": "romulostx",
+          "status": "Finished",
+          "place": 1,
+          "time": 5312,
+          "timeFormat": "01:28:32"
+        },
+        {
+          "name": "oicho",
+          "stream": "oichothrows",
+          "status": "Finished",
+          "place": 2,
+          "time": 5666,
+          "timeFormat": "01:34:26"
+        },
+        {
+          "name": "Herreteman",
+          "stream": "herreteman",
+          "status": "Forfeit",
+          "place": "-",
+          "time": 0,
+          "timeFormat": "Quit"
+        },
+        {
+          "name": "miakx",
+          "stream": "miakx",
+          "status": "Forfeit",
+          "place": "-",
+          "time": 0,
+          "timeFormat": "Quit"
+        }
+      ]
+    },
+    {
+      "name": "Oracle of Seasons",
+      "shortName": "OoS",
+      "longName": "The Legend of Zelda: Oracle of Seasons",
+      "category": "Any%",
+      "date": "2017-11-11T21:00:00Z",
+      "rankings": [
+        {
+          "name": "Puffy",
+          "stream": "puffffy",
+          "status": "Finished",
+          "place": 1,
+          "time": 6630,
+          "timeFormat": "01:50:30"
+        },
+        {
+          "name": "Dragonc0",
+          "stream": "dragonc0",
+          "status": "Finished",
+          "place": 2,
+          "time": 6641,
+          "timeFormat": "01:50:41"
+        },
+        {
+          "name": "mghtymth",
+          "stream": "mghtymth",
+          "status": "Finished",
+          "place": 3,
+          "time": 7334,
+          "timeFormat": "02:02:14"
+        },
+        {
+          "name": "Sttaner93",
+          "stream": "sttaner93",
+          "status": "Finished",
+          "place": 4,
+          "time": 7451,
+          "timeFormat": "02:04:11"
+        },
+        {
+          "name": "Izs",
+          "stream": "qdoe",
+          "status": "Finished",
+          "place": 5,
+          "time": 8013,
+          "timeFormat": "02:13:33"
+        },
+        {
+          "name": "ashthegame",
+          "stream": "aepstein824",
+          "status": "Forfeit",
+          "place": "-",
+          "time": 0,
+          "timeFormat": "Quit"
+        }
+      ]
+    }
+  ]
+}

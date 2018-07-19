@@ -1,0 +1,40 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../shared/style/zsr-text-styles.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../gdq-stepped-gradient-text/gdq-stepped-gradient-text.html">
+<link rel="import" href="../../../bower_components/polymer/lib/mixins/mutable-data.html">
+<link rel="import" href="../../../shared/style/zsr-input-style.html">
+<link rel="import" href="../../../bower_components/sc-fitted-text/sc-fitted-text.html">
+<link rel="stylesheet" href="../../../bower_components/lato-font/css/lato-font.css">
+
+
+<dom-module id="interview-nameplate">
+	<template>
+		<style include="zsr-input-style">
+			:host {
+				position: absolute;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-around;
+				white-space: nowrap;
+				color: black;
+				font-family: "Lato";
+			}
+			#player {
+                font-family: 'Lato';
+                font-style: Italic;
+                font-size: 32px;
+                color: white;
+				text-align: center;
+				white-space: pre;
+				text-transform: uppercase;
+
+			}
+
+		</style>
+	<div id="player" align="center">[[name]]Completed Goals</div>
+	</template>
+
+	<script src="interview-nameplate.js"></script>
+</dom-module>

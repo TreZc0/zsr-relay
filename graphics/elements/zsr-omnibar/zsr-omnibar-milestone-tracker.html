@@ -1,0 +1,91 @@
+<link rel="import" href="../../../shared/fonts/montserrat/import.html">
+<link rel="import" href="zsr-omnibar-milestone-tracker-point.html">
+
+<dom-module id="zsr-omnibar-milestone-tracker">
+	<template>
+		<style>
+			:host {
+				font-family: montserrat;
+				will-change: opacity;
+				@apply --layout-horizontal;
+				@apply --layout-flex;
+			}
+
+			#body {
+				position: relative;
+				overflow: hidden;
+				@apply --layout-horizontal;
+				@apply --layout-center;
+				@apply --layout-flex;
+			}
+
+			#nextGoalLabel {
+				line-height: normal;
+				font-size: 28px;
+				text-align: right;
+				color: ffd956;
+				text-transform: uppercase;
+				margin-left: auto;
+				padding-right: 7px;
+			}
+
+			#start {
+				--zsr-omnibar-milestone-tracker-point-color: #ffd956;
+				@apply --layout-flex-none;
+			}
+
+			#current {
+				--zsr-omnibar-milestone-tracker-point-color: #00FF00;
+				will-change: transform;
+				z-index: 1;
+			}
+
+			#end {
+				--zsr-omnibar-milestone-tracker-point-color: #ffd956;
+				margin-right: 9px;
+				@apply --layout-flex-none;
+			}
+
+			#fill {
+				position: absolute;
+				top: 0;
+				left: -100%;
+				width: 100%;
+				height: 100%;
+				will-change: transform;
+				background-color: #00FF00;
+				opacity: 0.6;
+			}
+		</style>
+
+		<zsr-omnibar-milestone-tracker-point
+			id="start"
+			align="right"
+			amount="[[milestone.precedingMilestone.total]]"
+			drop-trailing-zeroes>
+		</zsr-omnibar-milestone-tracker-point>
+
+		<div id="body">
+			<zsr-omnibar-milestone-tracker-point
+				id="current"
+				align="center"
+				amount="[[currentTotal]]">
+			</zsr-omnibar-milestone-tracker-point>
+
+			<div id="nextGoalLabel">
+				NEXT GOAL: [[milestone.name]]
+			</div>
+
+			<div id="fill"></div>
+		</div>
+
+		<zsr-omnibar-milestone-tracker-point
+			id="end"
+			align="left"
+			amount="[[milestone.total]]"
+			drop-trailing-zeroes>
+		</zsr-omnibar-milestone-tracker-point>
+	</template>
+
+	<script src="zsr-omnibar-milestone-tracker.js"></script>
+</dom-module>

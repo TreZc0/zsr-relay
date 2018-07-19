@@ -1,0 +1,19 @@
+<link rel="import" href="zsr-omnibar-list-item.html">
+
+<dom-module id="zsr-omnibar-prize">
+	<template>
+		<style>
+			:host {
+				display: block;
+			}
+		</style>
+
+		<zsr-omnibar-list-item
+			id="listItem"
+			first-line="[[prize.description]]"
+			second-line="[[calcBidAmountText(prize)]]">
+		</zsr-omnibar-list-item>
+	</template>
+
+	<script src="zsr-omnibar-prize.js"></script>
+</dom-module>

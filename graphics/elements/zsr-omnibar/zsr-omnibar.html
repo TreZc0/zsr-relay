@@ -1,0 +1,92 @@
+<link rel="import" href="../../../bower_components/polymer/lib/utils/render-status.html">
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../shared/fonts/source-code-pro/import.html">
+<link rel="import" href="../../../shared/style/zsr-text-styles.html">
+<link rel="import" href="zsr-omnibar-cta.html">
+<link rel="import" href="zsr-omnibar-label.html">
+<link rel="import" href="zsr-omnibar-left-divider.html">
+<link rel="import" href="zsr-omnibar-list.html">
+<link rel="import" href="zsr-omnibar-rank.html">
+<link rel="import" href="zsr-omnibar-run.html">
+
+<dom-module id="zsr-omnibar">
+	<template>
+		<style include="zsr-text-styles">
+			:host {
+				display: flex;
+				width: 1280px;
+				height: 55px;
+				color: white;
+				background: linear-gradient(180deg, #18284c 0%, #040C0D 100%);
+				font-family: "Montserrat", monospace;
+			}
+			#leftEdge {
+				width: 3px;
+				height: 100%;
+				background: linear-gradient(180deg, #fffbed 0%, #fffbed 100%);
+				box-shadow: 0 0 10px #fffbed;
+				margin-right: 15px;
+			}
+			#zsrLogo {
+				z-index: 3;
+				flex-shrink: 0;
+				margin-left: 2px;
+				margin-right: 2px;
+			}
+
+			#body {
+				display: flex;
+				flex-grow: 1;
+				height: 100%;
+				overflow: hidden;
+				position: relative;
+			}
+
+			#content {
+				height: 100%;
+				line-height: 1;
+				white-space: nowrap;
+				z-index: 1;
+				min-width: 1px;
+				@apply --layout-flex;
+				@apply --layout-horizontal;
+			}
+
+			#cta,
+			#milestoneAlert {
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
+			}
+
+			#cta {
+				font-size: 28px;
+			}
+
+			#milestoneAlert {
+				font-size: 33px;
+				z-index: 10;
+			}
+
+			#charityLogo {
+				z-index: 1;
+				@apply --layout-flex-none;
+			}
+		</style>
+
+		<img id="zsrLogo" src="[[importPath]]img/logo.png">
+		<div id="leftEdge"></div>
+
+		<div id="body">
+			<zsr-omnibar-label id="label"></zsr-omnibar-label>
+			<div id="content"></div>
+			<zsr-omnibar-cta id="cta"></zsr-omnibar-cta>
+		</div>
+		<zsr-omnibar-left-divider id="leftDivider"></zsr-omnibar-left-divider>
+		<img id="charityLogo" src="[[importPath]]img/logo-charity.png">
+	</template>
+
+	<script src="zsr-omnibar.js"></script>
+</dom-module>

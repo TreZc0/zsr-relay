@@ -1,0 +1,37 @@
+<link rel="import" href="zsr-omnibar-list-item.html">
+
+<dom-module id="zsr-omnibar-rank">
+	<template>
+		<style>
+			:host {
+				display: block;
+				--zsr-omnibar-list-item-border-color: rgb(255, 255, 255);
+				--zsr-omnibar-list-item-border-cap-color: rgb(255, 255, 255);
+			}
+			:host([first]) {
+				--zsr-omnibar-list-item-border-color: #ffd700;
+				--zsr-omnibar-list-item-border-cap-color: #ffd700;
+			}
+			:host([second]) {
+				--zsr-omnibar-list-item-border-color: #C0C0C0;
+				--zsr-omnibar-list-item-border-cap-color: #C0C0C0;
+			}
+			:host([third]) {
+				--zsr-omnibar-list-item-border-color:  #cd7f32;
+				--zsr-omnibar-list-item-border-cap-color: #cd7f32;
+			}
+			:host([forfeit]) {
+				--zsr-omnibar-list-item-border-color:  rgb(87, 87, 87);
+				--zsr-omnibar-list-item-border-cap-color: rgb(87, 87, 87);
+			}
+		</style>
+
+		<zsr-omnibar-list-item
+			id="listItem"
+			first-line="[[rank.rankName]]"
+			second-line="[[rank.time]]">
+		</zsr-omnibar-list-item>
+	</template>
+
+	<script src="zsr-omnibar-rank.js"></script>
+</dom-module>

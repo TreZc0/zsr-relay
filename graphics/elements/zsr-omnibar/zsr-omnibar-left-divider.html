@@ -1,0 +1,39 @@
+<dom-module id="zsr-omnibar-left-divider">
+	<template>
+		<style>
+			:host {
+				height: 100%;
+				@apply --layout-horizontal;
+			}
+
+			#thickLine {
+				width: 3px;
+				background: linear-gradient(180deg, #fffbed 0%, #fffbed 100%), #C4C4C4;
+				box-shadow: 2px 0 10px #494949;
+			}
+
+			#thinLine {
+				width: 1px;
+				margin-left: 1px;
+			}
+
+			#thinLine-top {
+				height: 32.72%;
+				background: #fffbed;
+			}
+
+			#thinLine-bottom {
+				height: 67.28%;
+				background: linear-gradient(180deg, #fffbed 0%, #fffbed 100%);
+			}
+		</style>
+
+		<div id="thickLine"></div>
+		<div id="thinLine">
+			<div id="thinLine-top"></div>
+			<div id="thinLine-bottom"></div>
+		</div>
+	</template>
+
+	<script src="zsr-omnibar-left-divider.js"></script>
+</dom-module>

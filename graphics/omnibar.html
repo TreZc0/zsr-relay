@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Omnibar</title>
+	<link rel="stylesheet" href="style/base.css">
+	<link rel="import" href="../shared/imports/gsap.html">
+	<link rel="import" href="elements/zsr-omnibar/zsr-omnibar.html">
+	<style>
+		#container {
+			width: 1280px;
+			height: 55px;
+		}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<zsr-omnibar></zsr-omnibar>
+	</div>
+
+	<script>
+		window.addEventListener('DOMContentLoaded', () => {
+			TweenLite.to(document.body, 0.333, {
+				opacity: 1,
+				ease: Power1.easeOut
+			});
+		});
+	</script>
+</body>
+</html>

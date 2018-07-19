@@ -1,0 +1,51 @@
+<link rel="import" href="../../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="zsr-omnibar-bidwar-option.html">
+<link rel="import" href="zsr-omnibar-content-label.html">
+<link rel="import" href="zsr-omnibar-list.html">
+
+<dom-module id="zsr-omnibar-bidwars">
+	<template>
+		<style>
+			:host {
+				min-width: 1px;
+				@apply --layout-horizontal;
+				@apply --layout-center;
+				@apply --layout-flex;
+			}
+
+			#label {
+				z-index: 10;
+				--zsr-omnibar-content-label-fg-color: #FF4D4D;
+				--zsr-omnibar-content-label-glow-color: rgba(255, 0, 0, 0.74);
+				--zsr-omnibar-content-label-bg-color: rgba(255, 140, 140, 0.2);
+				@apply --layout-flex-none;
+				margin-right: 2px;
+			}
+
+			#lists {
+				position: relative;
+				min-width: 1px;
+				height: 100%;
+				@apply --layout-flex;
+			}
+
+			.list {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
+
+			.list:not(.iron-selected) {
+				opacity: 0;
+				z-index: -10;
+			}
+		</style>
+
+		<zsr-omnibar-content-label id="label"></zsr-omnibar-content-label>
+		<iron-selector id="lists"></iron-selector>
+	</template>
+
+	<script src="zsr-omnibar-bidwars.js"></script>
+</dom-module>

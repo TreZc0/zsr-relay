@@ -1,0 +1,74 @@
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../shared/style/zsr-text-styles.html">
+<link rel="import" href="../atoms/atom-tweening-number/atom-tweening-number.html">
+
+<dom-module id="zsr-omnibar-total">
+	<template>
+		<style include="zsr-text-styles">
+			:host {
+				position: relative;
+				height: 100%;
+				white-space: nowrap;
+				padding-right: 10px;
+				@apply --layout-flex-none;
+				@apply --layout-horizontal;
+				@apply --layout-center-center;
+			}
+
+			#leftEdge {
+				width: 3px;
+				height: 100%;
+				background: linear-gradient(180deg, #fffbed 0%, #fffbed 100%);
+				box-shadow: 0 0 10px #fffbed;
+				margin-right: 15px;
+			}
+
+			#totals {
+				@apply --layout-vertical;
+			}
+
+			#totalText {
+				font-size: 24px;
+				font-family: montserrat, monospace;
+				@apply --layout-horizontal;
+				@apply --layout-center;
+			}
+
+			#totalTextAmount {
+				display: block;
+				position: absolute;
+				top: 13px;
+				left: 37px;
+			}
+
+			#totalTextAmountPlaceholder {
+				opacity: 0;
+			}
+
+			.gradientText {
+				color: transparent;
+
+				background-image: var(--atom-gradient-text-gradient, linear-gradient(
+					180deg,
+					#ffd956 0%,
+					#ffd956 100%
+				));
+				-webkit-background-clip: text;
+			}
+		</style>
+
+		<div id="leftEdge"></div>
+
+		<div id="totals">
+			<div id="totalText">
+				<div id="totalTextDollars" class="gradientText">$</div>
+
+				<!-- Workaround for https://bugs.chromium.org/p/chromium/issues/detail?id=670292 -->
+				<div id="totalTextAmountPlaceholder"></div>
+				<atom-tweening-number id="totalTextAmount" class="gradientText"></atom-tweening-number>
+			</div>
+		</div>
+	</template>
+
+	<script src="zsr-omnibar-total.js"></script>
+</dom-module>
