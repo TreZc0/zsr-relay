@@ -305,7 +305,7 @@ function signupChannel(message) {
 				"title": "**Race Signup is now open**",
 				"description": "The next race will be " + currentRun.value.round + " of the " + currentRun.value.name + " " + currentRun.value.category + " on " + racedate.toUTCString().replace("GMT","UTC") + "."
 					+ "\n\nFeel free to participate using the following commands:"
-					+ "```md\n[!enter](Enters you into the race)\n[!unenter](Removes you from the race)\n[!join commentary](Apply for commentary role)\n[!leave commentary](Remove commentary role)"
+					+ "```md\n[!enter gamename](Enters you into the race - replace gamename with your game (OoT3D, MM3D, TWWHD, TPHD))\n[!unenter](Removes you from the race)\n[!join commentary](Apply for commentary role)\n[!leave commentary](Remove commentary role)"
 					+ "\n[!show profile](View your race profile)\n[!update profile](Updates your race profile)\n[!unregister](Deletes your Auth data and roles)```",
 				"url": "https://discord.gg/" + currentRun.value.discord,
 				"color": 16192000,
@@ -446,7 +446,7 @@ function signupChannel(message) {
 	if (message.content.toLowerCase() === "!commands") {
 		message.reply("[!enter | !unenter | !join commentary | !leave commentary | !show profile | !update profile | !unregister]");
 	}
-	else if (message.content.toLowerCase() === "!enter") {
+	else if (message.content.toLowerCase().startsWith("!enter")) {
 		if (!discordRep.value.signupActive) {
 			message.reply("Signups are not accepted for the upcoming race at this time!");
 			return;
@@ -1332,7 +1332,6 @@ function enterRunner(message, userObj, memberObj, adminAdd) {
 
 	var userAccessToken = file.get("users." + userObj.id + ".accessToken");
 	var userRefreshToken = file.get("users." + userObj.id + ".refreshToken");
-
 	if (!userAccessToken) {
 		if (!adminAdd)
 			message.reply("Your discord auth data was lost or you landed here by accident. Please repeat the auth process before attempting to enter: " + zsrDiscordAuthLink);
@@ -1442,7 +1441,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 		}
 
 		let foundRunner;
-
+		
 		if (runners.value.length > 0) {
 			foundRunner = runners.value.find(runner => {
 				if (runner)
@@ -1468,6 +1467,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 		else {
 			let roleIDs = ["244954316266274816", "244954321152770069", "244954323501580298", "244954325116387329" ];
 			let team;
+			let gameName = message.split(" ")[1];
 			for (var i = 0; i <= 4; i++) {
 				if (message.member.roles.has(roleIDs[i]))
 				team = "Team " + (i+1);
@@ -1479,11 +1479,16 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 				name: memberObj.displayName,
 				stream: twitch.name,
 				discord: userObj.tag,
+				game: gameName,
 				state: 0, //0 = unready, 1 = ready, 2 = done, 3 = forfeited
 				place: 0,
 				time: 0,
 				timeFormat: ""
 			};
+			if (gameName == undefined) {
+				message.reply("You didn't specify a game!")
+				return;
+			}
 			if (!adminAdd) {
 				if (!message.member.roles.some(r=>roleIDs.includes(r.id))) {
 					message.reply("You are not part of a relay team!");
@@ -1509,6 +1514,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					stream: twitch.name,
 					discord: userObj.tag,
 					team: team,
+					game: gameName,
 					state: 0, //0 = unready, 1 = ready, 2 = done, 3 = forfeited
 					place: 0,
 					time: 0,
@@ -1523,6 +1529,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					stream: twitch.name,
 					discord: userObj.tag,
 					team: team,
+					game: gameName,
 					state: 0,
 					place: 0,
 					time: 0,
@@ -1551,6 +1558,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					teamArray[teamIndex].runners.push(playerArray);
 					teams.value.teams.push(teamArray[teamIndex]);
 					_sortTeams();
+					_sortRunners(teamIndex);
 				} else if (teamIndex != (teams.value.teams[teamIndex].id)) {
 					teamArray[teamIndex] = {
 						teamname: team,
@@ -1560,8 +1568,10 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					teamArray[teamIndex].runners.push(playerArray);
 					teams.value.teams.push(teamArray[teamIndex]);
 					_sortTeams();
+					_sortRunners(teamIndex);
 				} else {	
 					teams.value.teams[teamIndex].runners.push(playerArray);
+					_sortRunners(teamIndex);
 				}
 			}
 
@@ -1595,6 +1605,18 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 		}
 	});
 }
+function _sortRunners(index)
+{
+	var ordering = {};
+	var sortOrder = ['OoT3D', 'MM3D', 'TWWHD', 'TPHD'];
+	for (var i=0; i<sortOrder.length; i++)
+    	ordering[sortOrder[i]] = i;
+
+	teams.value.teams[index].runners.sort(function(a, b) {
+   		return (ordering[a.type] - ordering[b.type]) || a.gane.localeCompare(b.game);
+	});
+}
+
 function _sortTeams()
 {
 	teams.value.teams.sort(function(a,b) {
