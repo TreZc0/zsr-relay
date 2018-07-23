@@ -1467,7 +1467,22 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 		else {
 			let roleIDs = ["244954316266274816", "244954321152770069", "244954323501580298", "244954325116387329" ];
 			let team;
-			let gameName = message.split(" ")[1];
+			let gameName = message.content.split(" ")[1];
+			let slot;
+			switch(gameName.toLowerCase()) {
+				case "oo3d":
+					slot = 0;
+				break;
+				case "mm3d":
+					slot = 1;
+				break;
+				case "twwhd":
+					slot = 2;
+				break;
+				case "tphd":
+					slot = 3;
+				break;
+			}
 			for (var i = 0; i <= 4; i++) {
 				if (message.member.roles.has(roleIDs[i]))
 				team = "Team " + (i+1);
@@ -1480,6 +1495,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 				stream: twitch.name,
 				discord: userObj.tag,
 				game: gameName,
+				slot: slot,
 				state: 0, //0 = unready, 1 = ready, 2 = done, 3 = forfeited
 				place: 0,
 				time: 0,
@@ -1515,6 +1531,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					discord: userObj.tag,
 					team: team,
 					game: gameName,
+					slot: slot,
 					state: 0, //0 = unready, 1 = ready, 2 = done, 3 = forfeited
 					place: 0,
 					time: 0,
@@ -1530,6 +1547,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					discord: userObj.tag,
 					team: team,
 					game: gameName,
+					slot: slot,
 					state: 0,
 					place: 0,
 					time: 0,
@@ -1608,13 +1626,14 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 function _sortRunners(index)
 {
 	var ordering = {};
-	var sortOrder = ['OoT3D', 'MM3D', 'TWWHD', 'TPHD'];
+	var sortOrder = ['oot3d', 'mm3d', 'twwhd', 'tphd'];
 	for (var i=0; i<sortOrder.length; i++)
     	ordering[sortOrder[i]] = i;
-
 	teams.value.teams[index].runners.sort(function(a, b) {
-   		return (ordering[a.type] - ordering[b.type]) || a.gane.localeCompare(b.game);
+		log.info(a.game.toLowerCase() + " " + b.game.toLowerCase());
+   		return (ordering[a.game.toLowerCase()] - ordering[b.game.toLowerCase()]);
 	});
+
 }
 
 function _sortTeams()
