@@ -476,7 +476,7 @@ function formatRun(run, formattedRunners) {
 		return {
 			name: formattedRunners[runnerId].name,
 			stream: formattedRunners[runnerId].stream,
-			team: formattedRunners[runnerId].team
+			slot: formattedRunners[runnerId].slot,
 		};
 	});
 
