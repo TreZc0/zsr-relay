@@ -236,16 +236,56 @@ function _askChangeRun() {
     twitchPlayer.value.streamCVolume = 1.0;
     twitchPlayer.value.streamDVolume = 1.0;
 }
-function _askSwitchRunners(slot)
+
+nodecg.listenFor("nextRunner", runner => {
+	var id = 0;
+	var newRunner = {};
+	if (runner.team == "Team 1")
+		id = 1;
+	else if (runner.team == "Team 2")
+		id = 2;
+	else if (runner.team == "Team 3")
+		id = 3;
+	else
+		id = 4;
+	runners.value.find(repRunner => {
+		if ((repRunner.team == runner.team) && (repRunner.slot == (runner.slot+1))) {
+			newRunner = {name: repRunner.name, stream: repRunner.stream, slot: repRunner.slot}
+
+			return true;
+		}
+		return false;
+	});
+	switch(id) {
+		case 1:
+			twitchPlayer.value.streamAURL = runner.stream;
+			nextGame.value.runners[0] = newRunner;
+		break;
+		case 2:
+			twitchPlayer.value.streamBURL = runner.stream;
+			nextGame.value.runners[1] = newRunner;
+		break;
+		case 3:
+			twitchPlayer.value.streamCURL = runner.stream;
+			nextGame.value.runners[2] = newRunner;
+		break;
+		case 4:
+			twitchPlayer.value.streamDURL = runner.stream;
+			nextGame.value.runners[3] = newRunner;
+		break;
+	}
+
+});
+function _askSwitchRunners(teamNr)
 {
-    log.info("new runner list for team " + slot);
+    log.info("new runner list for team " + teamNr);
 
     var count = 0;
     var id = 0;
 	var newRunnerList = nextGame.value.runners;
 	var team;
 
-	switch(slot) {
+	switch(teamNr) {
 		case 1:
 			team = twitchPlayer.value.team1;
 		break;
@@ -281,60 +321,39 @@ function _askSwitchRunners(slot)
                 if (runner) {
                     if (runner.name === newRunner.name) {
 						log.info("play runner[" + id + "]: " + newRunner.name + " with stream: " + runner.stream);
-						if ((['3DS', 'Nintendo 3DS', 'NDS', 'Nintendo DS', 'NDSi', 'Nintendo DSi'].includes(nextGame.value.console)) && (count <= 2)) {
-							switch(id) {
-								case 1:
-									if (twitchPlayer.value.streamAURL !== runner.stream) {
-										twitchPlayer.value.streamAURL = runner.stream;
-										twitchPlayer.value.streamBURL = runner.stream;
-									}
-									newRunnerList[0] = { name: newRunner.name, stream: runner.stream };
-
-									break;
-								case 2:
-									if (twitchPlayer.value.streamCURL !== runner.stream) {
-										twitchPlayer.value.streamCURL = runner.stream;
-										twitchPlayer.value.streamDURL = runner.stream;
-									}
-									newRunnerList[1] = { name: newRunner.name, stream: runner.stream };
-									break;
-								default:
-									break;
-							}
-						} else {
-                       		switch (id) {
+	                		switch (id) {
 								case 1:
 									if (twitchPlayer.value.streamAURL !== runner.stream)
 										twitchPlayer.value.streamAURL = runner.stream;
 
-									newRunnerList[0] = { name: newRunner.name, stream: runner.stream };
+									newRunnerList[0] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, time: runner.timeFormat };
 
 									break;
 								case 2:
 									if (twitchPlayer.value.streamBURL !== runner.stream)
 										twitchPlayer.value.streamBURL = runner.stream;
 
-									newRunnerList[1] = { name: newRunner.name, stream: runner.stream };
+									newRunnerList[1] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, time: runner.timeFormat };
 
 									break;
 								case 3:
 									if (twitchPlayer.value.streamCURL !== runner.stream)
 										twitchPlayer.value.streamCURL = runner.stream;
 				
-									newRunnerList[2] = { name: newRunner.name, stream: runner.stream };
+									newRunnerList[2] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, time: runner.timeFormat };
 
 									break;
 								case 4:
 									if (twitchPlayer.value.streamDURL !== runner.stream)
 										twitchPlayer.value.streamDURL = runner.stream;
 
-									newRunnerList[3] = { name: newRunner.name, stream: runner.stream };
+									newRunnerList[3] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, time: runner.timeFormat };
 
 									break;
 								default:
 									break;
 							}
-						}
+						
                         return true;
                     }
                 }

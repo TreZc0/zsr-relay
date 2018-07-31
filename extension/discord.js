@@ -42,7 +42,7 @@ const bot = new Discord.Client();
 
 const testMode = true; //TEST MODE; TURN OFF WHEN RUNNING SERVER IN PRODUCTION
 
-const zsrBotToken = "";
+const zsrBotToken = nodecg.bundleConfig.discordBotToken;
 const zsrServerID = "244939773121265664";
 
 const zsrStreamChannelID = "378757983229706260";
@@ -1032,10 +1032,12 @@ function raceChannel(message) {
 						time: foundRunner.time,
 						timeFormat: foundRunner.timeFormat
 					})
+					
 
 					message.channel.send("```diff\n- " + foundRunner.name + " has finished in " + foundRunner.place + ". place with a time of " + foundRunner.timeFormat + "! -```")
 						.then(() => {
 							//Check if race is done
+							nodecg.sendMessage("nextRunner", foundRunner);
 							_raceDoneCheck(message.channel);
 						});
 				}
