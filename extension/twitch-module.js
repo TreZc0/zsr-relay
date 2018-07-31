@@ -258,19 +258,19 @@ nodecg.listenFor("nextRunner", runner => {
 	});
 	switch(id) {
 		case 1:
-			twitchPlayer.value.streamAURL = runner.stream;
+			twitchPlayer.value.streamAURL = newRunner.stream;
 			nextGame.value.runners[0] = newRunner;
 		break;
 		case 2:
-			twitchPlayer.value.streamBURL = runner.stream;
+			twitchPlayer.value.streamBURL = newRunner.stream;
 			nextGame.value.runners[1] = newRunner;
 		break;
 		case 3:
-			twitchPlayer.value.streamCURL = runner.stream;
+			twitchPlayer.value.streamCURL = newRunner.stream;
 			nextGame.value.runners[2] = newRunner;
 		break;
 		case 4:
-			twitchPlayer.value.streamDURL = runner.stream;
+			twitchPlayer.value.streamDURL = newRunner.stream;
 			nextGame.value.runners[3] = newRunner;
 		break;
 	}
