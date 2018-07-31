@@ -250,7 +250,7 @@ nodecg.listenFor("nextRunner", runner => {
 		id = 4;
 	runners.value.find(repRunner => {
 		if ((repRunner.team == runner.team) && (repRunner.slot == (runner.slot+1))) {
-			newRunner = {name: repRunner.name, stream: repRunner.stream, slot: repRunner.slot}
+			newRunner = {name: repRunner.name, stream: repRunner.stream, slot: repRunner.slot, game: repRunner.game}
 
 			return true;
 		}
@@ -326,28 +326,28 @@ function _askSwitchRunners(teamNr)
 									if (twitchPlayer.value.streamAURL !== runner.stream)
 										twitchPlayer.value.streamAURL = runner.stream;
 
-									newRunnerList[0] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, time: runner.timeFormat };
+									newRunnerList[0] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, game: runner.game };
 
 									break;
 								case 2:
 									if (twitchPlayer.value.streamBURL !== runner.stream)
 										twitchPlayer.value.streamBURL = runner.stream;
 
-									newRunnerList[1] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, time: runner.timeFormat };
+									newRunnerList[1] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, game: runner.game };
 
 									break;
 								case 3:
 									if (twitchPlayer.value.streamCURL !== runner.stream)
 										twitchPlayer.value.streamCURL = runner.stream;
 				
-									newRunnerList[2] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, time: runner.timeFormat };
+									newRunnerList[2] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, game: runner.game };
 
 									break;
 								case 4:
 									if (twitchPlayer.value.streamDURL !== runner.stream)
 										twitchPlayer.value.streamDURL = runner.stream;
 
-									newRunnerList[3] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, time: runner.timeFormat };
+									newRunnerList[3] = { name: newRunner.name, stream: runner.stream, slot: runner.slot, game: runner.game };
 
 									break;
 								default:
