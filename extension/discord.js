@@ -42,7 +42,7 @@ const bot = new Discord.Client();
 
 const testMode = true; //TEST MODE; TURN OFF WHEN RUNNING SERVER IN PRODUCTION
 
-const zsrBotToken = "Mzc2MDI3OTA3ODAzNDQ3Mjk2.DN6Srg.HwKQn9AVQMQVLa7dGIx1lkoepu0";
+const zsrBotToken = "";
 const zsrServerID = "244939773121265664";
 
 const zsrStreamChannelID = "378757983229706260";
