@@ -1007,9 +1007,22 @@ function raceChannel(message) {
 				if (foundRunner.state == 1)
 				{
 					foundRunner.state = 2;
-					foundRunner.time = stopwatch.value.raw;
-					foundRunner.timeFormat = stopwatch.value.formatted;
-
+					if (foundRunner.slot < 1) {
+						foundRunner.time = foundRunner.fullTime = stopwatch.value.raw;
+						foundRunner.timeFormat = foundRunner.fullTimeFormat = stopwatch.value.formatted;
+					} else {
+						let prevRunner = runners.value.find(runner => {
+							if (runner)
+								if ((runner.team == foundRunner.team) && (runner.slot == (foundRunner.slot-1)))
+								return true;
+							return false;
+						});
+						let indivTime = stopwatch.value.raw - prevRunner.time
+						foundRunner.time = indivTime;
+						foundRunner.fullTime = stopwatch.value.raw;
+						foundRunner.timeFormat = new Date(indivTime * 1000).toISOString().substr(11, 8);
+						foundRunner.fullTimeFormat = stopwatch.value.formatted;
+					};
 					//Calc placement
 					foundRunner.place = 0;
 
@@ -1501,7 +1514,9 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 				state: 0, //0 = unready, 1 = ready, 2 = done, 3 = forfeited
 				place: 0,
 				time: 0,
-				timeFormat: ""
+				fullTime: 0,
+				timeFormat: "",
+				fullTimeFormat: ""
 			};
 			if (gameName == undefined) {
 				message.reply("You didn't specify a game!")
@@ -1537,7 +1552,9 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					state: 0, //0 = unready, 1 = ready, 2 = done, 3 = forfeited
 					place: 0,
 					time: 0,
-					timeFormat: ""
+					fullTime: 0,
+					timeFormat: "",
+					fulltimeFormat: ""
 				};
 			}
 			else {
@@ -1553,7 +1570,9 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					state: 0,
 					place: 0,
 					time: 0,
-					timeFormat: ""
+					fullTime: 0,
+					timeFormat: "",
+					fulltimeFormat: ""
 				});
 			}
 			if (teams.value.teams.length == 0) {
