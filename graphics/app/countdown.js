@@ -55,10 +55,6 @@
 		}
 	});
 	
-	currentRun.on('change', newVal => {
-		if (newVal) 
-			document.getElementById("game").src="img/logo/" + newVal.shortName + ".png";
-	});
 	
 	nowPlaying.on('change', newVal => {
 		TweenLite.to(nowPlayingDisplay, 0.33, {
