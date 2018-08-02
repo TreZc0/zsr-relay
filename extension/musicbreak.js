@@ -50,8 +50,6 @@ function findSongs(shortName) {
     currRunName = shortName;
 
     runFolder = basePath;
-    runFolder = runFolder.concat(shortName);
-    runFolder = runFolder.concat("/");
 
     let testFile = "";
 
