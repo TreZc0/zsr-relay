@@ -256,25 +256,41 @@ nodecg.listenFor("nextRunner", runner => {
 		}
 		return false;
 	});
+	let delay;
 	switch(id) {
 		case 1:
-			twitchPlayer.value.streamAURL = newRunner.stream;
-			nextGame.value.runners[0] = newRunner;
+			delay = twitchPlayer.value.streamADelay; 
 		break;
 		case 2:
-			twitchPlayer.value.streamBURL = newRunner.stream;
-			nextGame.value.runners[1] = newRunner;
+			delay = twitchPlayer.value.streamBDelay;
 		break;
 		case 3:
-			twitchPlayer.value.streamCURL = newRunner.stream;
-			nextGame.value.runners[2] = newRunner;
+			delay = twitchPlayer.value.streamCDelay;
 		break;
 		case 4:
-			twitchPlayer.value.streamDURL = newRunner.stream;
-			nextGame.value.runners[3] = newRunner;
+			delay = twitchPlayer.value.streamDDelay;
 		break;
 	}
-
+	let delayCheck = setTimeout(() => {
+		switch(id) {
+			case 1:
+				twitchPlayer.value.streamAURL = newRunner.stream;
+				nextGame.value.runners[0] = newRunner;
+			break;
+			case 2:
+				twitchPlayer.value.streamBURL = newRunner.stream;
+				nextGame.value.runners[1] = newRunner;
+			break;
+			case 3:
+				twitchPlayer.value.streamCURL = newRunner.stream;
+				nextGame.value.runners[2] = newRunner;
+			break;
+			case 4:
+				twitchPlayer.value.streamDURL = newRunner.stream;
+				nextGame.value.runners[3] = newRunner;
+			break;
+		}
+	}, delay+8000); // switch runner 8 seconds after restream caught up.
 });
 function _askSwitchRunners(teamNr)
 {

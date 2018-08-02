@@ -1049,8 +1049,11 @@ function raceChannel(message) {
 
 					message.channel.send("```diff\n- " + foundRunner.name + " has finished in " + foundRunner.place + ". place with a time of " + foundRunner.timeFormat + "! -```")
 						.then(() => {
-							//Check if race is done
+							//notify next runner via PM
+							_notifyRunner(foundRunner);
+							//Switch Restream to next runner with 8 second delay
 							nodecg.sendMessage("nextRunner", foundRunner);
+							//Check if race is done
 							_raceDoneCheck(message.channel);
 						});
 				}
@@ -2013,6 +2016,17 @@ function _updateTopics(runnerVal) {
 			bot.guilds.get(zsrServerID).channels.get(zsrRaceChannelID).setTopic(statusRace + " " + currentRun.value.longName + " " + currentRun.value.category + " Race (" + readiedUpCount + "/" + runnerVal.length + " Ready)", "Title Update");
 		}
 	}
+}
+
+function _notifyRunner(finishedRunner)
+{
+	let nextRunner = runners.value.find(runner => {
+		if (runner)
+			if ((finishedRunner.team == runner.team) && (finishedRunner.slot == (runner.slot-1)))
+				return true;	
+		return false;
+	});
+	guild.members.get(nextRunner.id).send("GOGOGO! Your teammate just finished! Remember to enter !done as soon as possible after you finished your run as it determines when your teammate is allowed to start!");
 }
 
 function _raceDoneCheck(channel)
