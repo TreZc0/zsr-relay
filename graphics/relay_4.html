@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="style/layout.css">
 	<link rel="import" href="../shared/imports/gsap.html">
 	<link rel="import" href="elements/gdq-nameplate/gdq-nameplate.html">
-	<link rel="import" href="elements/zsr-runinfo/zsr-runinfo.html">
+	<link rel="import" href="elements/relay-runinfo/relay-runinfo.html">
 	<link rel="import" href="elements/zsr-timer/zsr-timer.html">
 	<link rel="import" href="elements/gdq-twitter/gdq-twitter.html">
 	<link rel="import" href="elements/gdq-sponsors/gdq-sponsors.html">
@@ -21,7 +21,7 @@
 			}
 			zsr-aspectboxes:nth-of-type(1) {
 				top: 52px;
-				left: 620px;
+				left: 610px;
 			}
 
 			zsr-aspectboxes:nth-of-type(2) {
@@ -31,7 +31,7 @@
 
 			zsr-aspectboxes:nth-of-type(3) {
 				top: 343px;
-				left: 620px;
+				left: 610px;
 			}
 
 			zsr-aspectboxes:nth-of-type(4) {
@@ -44,32 +44,30 @@
 			}
 
 			gdq-nameplate:nth-of-type(1) {
-				top: 180px;
-				left: 521px;
+				top: 287px;
+				left: 150px;
 			}
 
 			gdq-nameplate:nth-of-type(2) {
-				top: 240px;
-				right: 521px;
+				top: 287px;
+				right: 150px;
 			}
 
 			gdq-nameplate:nth-of-type(3) {
-				top: 392px;
-				left: 521px;
+				bottom: 52px;
+				left: 150px;
 			}
 
 			gdq-nameplate:nth-of-type(4) {
-				top: 452px;
-				right: 521px;
+				bottom: 52px;
+				right: 150px;
 			}
 
-			zsr-runinfo {
-				left: 521px;
-				top: 22px;
-				width: 240px;
-				height: 145px;
-				--gdq-runinfo-misc-height: 38px;
-				--gdq-runinfo-misc-font-size: 16px;
+			relay-runinfo {
+				left: 440px;
+				top: 0px;
+				width: 400px;
+				height: 48px;
 			}
 
 			zsr-timer {
@@ -82,10 +80,10 @@
 			}
 			
 			zsr-discord-voice {
-				--zsr-discord-voice-min-width: 165px;
+				--zsr-discord-voice-min-width: 800px;
 				position: absolute; 
-				left: 776px; 
-				top: 270px; 
+				left: 240px; 
+				bottom: 20px;
 				z-index: 10
 			}
 		</style>
@@ -95,8 +93,8 @@
 	<div id="container">
 		<img id="background" src="img/backgrounds/relay_4_bg.png">
 		<div style="width: 515px; height: 150px; overflow: visible"> 
-		<zsr-discord-voice tablewidth="500" columnsperline="3"></zsr-discord-voice> </div>
-		<zsr-runinfo></zsr-runinfo>
+		<zsr-discord-voice tablewidth="800" columnsperline="7"></zsr-discord-voice> </div>
+		<relay-runinfo></relay-runinfo>
 		<zsr-timer></zsr-timer>
 		<zsr-aspectboxes index="0"></zsr-aspectboxes>
 		<zsr-aspectboxes index="1"></zsr-aspectboxes>
