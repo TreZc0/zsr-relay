@@ -956,7 +956,9 @@ function raceChannel(message) {
 						status: "Finished",
 						place: foundRunner.place,
 						time: foundRunner.time,
-						timeFormat: foundRunner.timeFormat
+						timeFormat: foundRunner.timeFormat,
+						fullTime: foundRunner.fullTime,
+						fullTimeFormat: foundRunner.fulltimeFormat
 					})
 					
 
