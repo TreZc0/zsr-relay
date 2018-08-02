@@ -61,7 +61,7 @@
   "homepage": "http://zelda.speedruns.com",
   "license": "Apache-2.0",
   "nodecg": {
-    "compatibleRange": "~0.9.0",
+    "compatibleRange": ">=1.0.0",
     "dashboardPanels": [
       {
         "name": "1. Relay Dashboard",
