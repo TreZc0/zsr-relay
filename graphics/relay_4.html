@@ -16,10 +16,6 @@
 	
 	<custom-style>
 		<style>
-			gdq-nameplate {
-				--gdq-nameplate-width: 190px;
-			}
-
 			zsr-aspectboxes {
 				z-index: 8;
 			}
@@ -41,6 +37,10 @@
 			zsr-aspectboxes:nth-of-type(4) {
 				top: 343px;
 				left: 652px;
+			}
+
+			gdq-nameplate {
+				--gdq-nameplate-width: 190px;
 			}
 
 			gdq-nameplate:nth-of-type(1) {
@@ -117,10 +117,18 @@
 			});
 		});
 	</script>
-<div style="width: 480px; height: 270px; overflow: hidden; position: absolute; left:150px; top:53px; z-index: -20"><div id="twitch-streamA"></div></div>
-<div style="width: 480px; height: 270px; overflow: hidden; position: absolute; right:150px; top:53px; z-index: -20"><div id="twitch-streamB"></div></div>
-<div style="width: 480px; height: 270px; overflow: hidden; position: absolute; left:150px; bottom:53px; z-index: -20"><div id="twitch-streamC"></div></div>
-<div style="width: 480px; height: 270px; overflow: hidden; position: absolute; right:150px; bottom:53px; z-index: -20"><div id="twitch-streamD"></div></div>
-<twitch-player></twitch-player>
+	<div style="width: 480px; height: 270px; overflow: hidden; position: absolute; left:150px; top:53px; z-index: -20">
+		<div id="twitch-streamA"></div>
+	</div>
+	<div style="width: 480px; height: 270px; overflow: hidden; position: absolute; right:150px; top:53px; z-index: -20">
+		<div id="twitch-streamB"></div>
+	</div>
+	<div style="width: 480px; height: 270px; overflow: hidden; position: absolute; left:150px; bottom:53px; z-index: -20">
+		<div id="twitch-streamC"></div>
+	</div>
+	<div style="width: 480px; height: 270px; overflow: hidden; position: absolute; right:150px; bottom:53px; z-index: -20">
+		<div id="twitch-streamD"></div>
+	</div>
+	<twitch-player></twitch-player>
 </body>
 </html>

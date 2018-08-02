@@ -189,7 +189,7 @@ function signupChannel(message) {
 	//ADMIN COMMANDS
 	if (message.member.hasPermission("MANAGE_CHANNELS")) {
 		if (message.content.toLowerCase() === "!commands") {
-			message.reply("ADMIN: [!clear | !signup on | !signup off | !race setup | !race reset | !add runner *{discordTag}* | !remove runner *{discordTag}*] | !tournament start | !tournament reset\nUSER: [!enter | !unenter | !join commentary | !leave commentary | !show profile | !update profile | !unregister]");
+			message.reply("ADMIN: [!clear | !signup on | !signup off | !race setup | !race reset | !add runner *{discordTag}* | !remove runner *{discordTag}*] | !tournament start | !tournament reset\nUSER: [!enter | !join commentary | !leave commentary | !show profile | !update profile | !unregister]");
 			return;
 		}
 		else if (message.content.toLowerCase() === "!clear") {
@@ -305,7 +305,7 @@ function signupChannel(message) {
 				"title": "**Race Signup is now open**",
 				"description": "The next race will be " + currentRun.value.round + " of the " + currentRun.value.name + " " + currentRun.value.category + " on " + racedate.toUTCString().replace("GMT","UTC") + "."
 					+ "\n\nFeel free to participate using the following commands:"
-					+ "```md\n[!enter gamename](Enters you into the race - replace gamename with your game (OoT3D, MM3D, TWWHD, TPHD))\n[!unenter](Removes you from the race)\n[!join commentary](Apply for commentary role)\n[!leave commentary](Remove commentary role)"
+					+ "```md\n[!enter gamename](Enters you into the race - replace gamename with your game (OoT3D, MM3D, TWWHD, TPHD))\n[!join commentary](Apply for commentary role)\n[!leave commentary](Remove commentary role)"
 					+ "\n[!show profile](View your race profile)\n[!update profile](Updates your race profile)\n[!unregister](Deletes your Auth data and roles)```",
 				"url": "https://discord.gg/" + currentRun.value.discord,
 				"color": 16192000,
@@ -444,7 +444,7 @@ function signupChannel(message) {
 
 	//USER COMMANDS
 	if (message.content.toLowerCase() === "!commands") {
-		message.reply("[!enter | !unenter | !join commentary | !leave commentary | !show profile | !update profile | !unregister]");
+		message.reply("[!enter | !join commentary | !leave commentary | !show profile | !update profile | !unregister]");
 	}
 	else if (message.content.toLowerCase().startsWith("!enter")) {
 		if (!discordRep.value.signupActive) {
@@ -466,68 +466,13 @@ function signupChannel(message) {
 
 		if (foundRunner) {
 
-			message.reply("You already registered for this race! If you wish to unenter use *!unenter*. If you want to save your adjusted run profile please use *!update profile*");
+			message.reply("You already registered for this race! If you want to save your adjusted run profile please use *!update profile*");
 			return;
 		}
 
 		enterRunner(message, message.author, message.member, false);
 	}
-	else if (message.content.toLowerCase() === "!unenter") {
-		if (discordRep.value.raceSetup) {
-			message.reply("You can no longer unenter while a race is in progress! Please quit the race instead after it started or contact the stream manager to manually remove you from the race.\nIf you wish to update your run profile you can still do so with *!update profile*");
-			return;
-		}
-
-		let foundRunner;
-		let runnerIndex = 0;
-
-		if (runners.value.length > 0) {
-			foundRunner = runners.value.find(runner => {
-				if (runner)
-					if (runner.id === message.author.id) 
-						return true;
-
-				runnerIndex++;
-
-				return false;
-			});
-		}
-		let foundRelayRunner;
-		let relayIndex;
-		let teamID;
-		if (teams.value.teams.length > 0) {
-			teams.value.teams.forEach(team => {
-				foundRelayRunner = team.runners.find((runner, index) => {
-					if (runner)
-						if (runner.id === message.author.id) {
-							teamID = index;
-							return true;
-						}
-					relayIndex++;
-
-					return false;
-				});		
-			});
-		}
-		if (foundRunner) {
-
-			runners.value.splice(runnerIndex, 1);
-			if (foundRelayRunner) {
-				teams.value.teams[teamID].runners.splice(relayIndex, 1);
-				if (teams.value.teams[teamID].runners.length == 0)
-					teams.value.teams.splice(teamID,1);
-			}
-			if (discordRep.value.signupActive)
-				message.reply("You were successfully removed from the upcoming race. Feel free to re-enter later on if you wish to do so");
-			else
-				message.reply("You were successfully removed from the upcoming race. You will not be able to re-enter so if this command happened in error please contact the stream manager");
-		}
-
-		else {
-			message.reply("You werent in this race to begin with. To enter a race please use *!enter* during the registration period");
-		}
-	}
-	else if (message.content.toLowerCase() === "!join commentary") {
+		else if (message.content.toLowerCase() === "!join commentary") {
 		if (!discordRep.value.signupActive) {
 			message.reply("Signups are no longer accepted for the upcoming race!");
 			return;
@@ -1050,9 +995,11 @@ function raceChannel(message) {
 					message.channel.send("```diff\n- " + foundRunner.name + " has finished in " + foundRunner.place + ". place with a time of " + foundRunner.timeFormat + "! -```")
 						.then(() => {
 							//notify next runner via PM
-							_notifyRunner(foundRunner);
-							//Switch Restream to next runner with 8 second delay
-							nodecg.sendMessage("nextRunner", foundRunner);
+							if (foundRunner.slot < 3) {
+								_notifyRunner(foundRunner);
+								//Switch Restream to next runner with 8 second delay
+								nodecg.sendMessage("nextRunner", foundRunner);
+							}
 							//Check if race is done
 							_raceDoneCheck(message.channel);
 						});
@@ -1316,7 +1263,7 @@ bot.on('message', message => {
 					},
 					{
 						"name": "*!done*:",
-						"value": "Notifies the bot that you finished your run",
+						"value": "Notifies the bot that you finished your run - this will inform the next runner in your team to start their run!",
 						"inline": true
 					},
 					{
@@ -1483,7 +1430,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 			foundRunner.discord = userObj.tag;
 		}
 		else {
-			let roleIDs = ["244954316266274816", "244954321152770069", "244954323501580298", "244954325116387329" ];
+			let roleIDs = ["244954316266274816", "244954321152770069", "244954323501580298", "244954325116387329"];
 			let team;
 			let gameName = message.content.split(" ")[1];
 			let slot;
@@ -1850,7 +1797,7 @@ function _initRace(guild, message) {
 		}
 
 		var embed = {
-			"description": "<@&" + zsrRaceEnteredID + "> **Starting soon: " + raceName + " " + currentRun.value.category + " Race**\n\nPlease use the following commands at your discretion:```md\n[!ready](Be ready to start at a moments notice)\n[!unready](Unready asap if you get distracted)\n[!done](As soon as you finish)\n[!undone](If you made a mistake)\n[!quit](In case you cannot finish your run)```Happy Racing!!",
+			"description": "<@&" + zsrRaceEnteredID + "> **Starting soon: " + raceName + " " + currentRun.value.category + " Race**\n\nPlease use the following commands at your discretion:```md\n[!ready](Be ready to start at a moments notice)\n[!unready](Unready asap if you get distracted)\n[!done](As soon as you finish - this will inform the next runner in your team to start their run)\n[!undone](If you made a mistake)\n[!quit](In case you cannot finish your run)```Happy Racing!!",
 			"url": "https://speedrun.com/" + currentRun.value.srcom,
 			"color": 16192000,
 			"thumbnail": {
@@ -1868,7 +1815,7 @@ function _initRace(guild, message) {
 		embed = {
 			"title": "Commentary Guidelines",
 			"description": "We have a few rules and guidelines for commentators to guarantee a pleasant viewing experience on our Twitch stream.",
-			"url": "https://zsr-nodecg.eu:9090/bundles/external-assets/graphics/commentary.html",
+			"url": "https://zsr-nodecg.eu:9090/bundles/external-assets/graphics/commentary_relay.html",
 			"color": 1634359,
 			"footer": {
 				"icon_url": basePathAssets + "bot_iconotspm.png",
@@ -1880,7 +1827,7 @@ function _initRace(guild, message) {
 			"fields": [
 				{
 					"name": "__Rundown:__",
-					"value": "The stream manager will get in contact with you roughly 45 minutes before the race starts and ask you to join the #Commentary voice channel.\nPlease be available at that time to test audio and balance your microphone volume.\nOnce the race is about to start, the stream manager/host will give a quick introduction on stream before handing it over to you.\nEvery further information during the race will be given in the #race-commentary channel, so make sure to check this channel frequently."
+					"value": "The stream manager will get in contact with you roughly 30 minutes before the race starts and ask you to join the #Commentary voice channel.\nPlease be available at that time to test audio and balance your microphone volume.\nOnce the race is about to start, the stream manager/host will give a quick introduction on stream before handing it over to you.\nEvery further information during the race will be given in the #race-commentary channel, so make sure to check this channel frequently."
 				},
 				{
 					"name": "__Microphone Settings:__",
@@ -1888,7 +1835,7 @@ function _initRace(guild, message) {
 				},
 				{
 					"name": "__Runners on Stream:__",
-					"value": "You have access to a special Commentary page that updates the currently shown runners automatically and also provides you with the ZSR Twitch chat. Please make sure to commentate off this page to ensure you will be synced with the restream:\n https://zsr-nodecg.eu/bundles/external-assets/graphics/commentary_tournament.html \n Please adjust the page to your preferred size and then reload. The streams and twitch chat will adjust their size."
+					"value": "You have access to a special Commentary page that updates the currently shown runners automatically and also provides you with the ZSR Twitch chat. Please make sure to commentate off this page to ensure you will be synced with the restream:\n https://zsr-nodecg.eu/bundles/external-assets/graphics/commentary_relay.html \n Please adjust the page to your preferred size and then reload. The streams and twitch chat will adjust their size."
 				},
 				{
 					"name": "__General Rules:__",
