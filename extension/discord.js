@@ -20,7 +20,7 @@ const schedule = nodecg.Replicant('schedule');
 const stopwatch = nodecg.Replicant('stopwatch');
 const leaderboard = nodecg.Replicant('leaderboard');
 
-const resultSnap = nodecg.Replicant('resultSnapTournament', 'external-assets');
+const resultSnap = nodecg.Replicant('resultSnapRelay', 'external-assets');
 
 const discordRep = nodecg.Replicant('discord', {
 	defaultValue: {
@@ -189,7 +189,7 @@ function signupChannel(message) {
 	//ADMIN COMMANDS
 	if (message.member.hasPermission("MANAGE_CHANNELS")) {
 		if (message.content.toLowerCase() === "!commands") {
-			message.reply("ADMIN: [!clear | !signup on | !signup off | !race setup | !race reset | !add runner *{discordTag}* | !remove runner *{discordTag}*] | !tournament start | !tournament reset\nUSER: [!enter | !join commentary | !leave commentary | !show profile | !update profile | !unregister]");
+			message.reply("ADMIN: [!clear | !signup on | !signup off | !race setup | !race reset | !add runner *{discordTag}* | !remove runner *{discordTag}*] \nUSER: [!enter | !join commentary | !leave commentary | !show profile | !update profile | !unregister]");
 			return;
 		}
 		else if (message.content.toLowerCase() === "!clear") {
@@ -251,35 +251,7 @@ function signupChannel(message) {
 
 			return;
 		}
-		else if (message.content.toLowerCase() === "!tournament start") {
-
-			let standingsPath = path.resolve(process.env.NODECG_ROOT, 'bundles/external-assets/graphics/img/standings/standings.json');
-			let json = easyjson.path(standingsPath);
-			var index = json.get('tournament').length;
-			json.add('tournament[index]',
-			{
-				raceCount: 0, 
-				name: currentRun.value.name, 
-				shortName: currentRun.value.shortName, 
-				longName: currentRun.value.longName, 
-				category: currentRun.value.category, 
-				results: [], 
-				standings: []
-			});
-			message.reply("You launched a new tournament for " + currentRun.value.name + "!");
-			return;
-		}
-		else if (message.content.toLowerCase() === "!tournament reset") {
-			let standingsPath = path.resolve(process.env.NODECG_ROOT, 'bundles/external-assets/graphics/img/standings/standings.json');
-			let json = easyjson.path(standingsPath);
-			json.del('tournament[0]');
-			message.reply("All results of the ongoing " + currentRun.value.name + " tournament have been deleted!");
-			return;
-		}
 		else if (message.content.toLowerCase() === "!signup on") {
-			let standingsPath = path.resolve(process.env.NODECG_ROOT, 'bundles/external-assets/graphics/img/standings/standings.json');
-			let json = easyjson.path(standingsPath);
-			let tournament = json.get("tournament");
 			if (discordRep.value.signupActive) {
 				message.reply("Signups were already turned on!");
 				return;
@@ -287,10 +259,6 @@ function signupChannel(message) {
 
 			if (discordRep.value.raceSetup) {
 				message.reply("You can't do this while a race is active!");
-				return;
-			}
-			if (tournament.length == 0) {
-				message.reply("There is no active tournament!");
 				return;
 			}
 			discordRep.value.signupActive = true;
@@ -2058,7 +2026,7 @@ function _postResults(channel)
 				var racedate = new Date(msec);
 				const embed = {
 					"title": currentRun.value.name + " " + currentRun.value.category + " - " + currentRun.value.round + " on " + racedate.toUTCString().replace("GMT","UTC") + ".",
-					"url": "http://zelda.speedruns.com/tournament-results",
+					"url": "http://zelda.speedruns.com/relay-results",
 					"color": 1369976,
 					"timestamp": postDate,
 					"footer": {
@@ -2069,11 +2037,11 @@ function _postResults(channel)
 						"url": basePathIcon.concat(currentRun.value.shortName) + ".png"
 					},
 					"image": {
-						"url": basePathAssets.concat("results/tournament/" + currentRun.value.shortName + "_" + currentRun.value.category.split(" ").join("").replace("%", "").replace("'", "") + currentRun.value.round.split(" ").join("") + "_" + racedate.getUTCFullYear().toString()) + ".png"
+						"url": basePathAssets.concat("results/relay/" + currentRun.value.shortName + "_" + currentRun.value.category.split(" ").join("").replace("%", "").replace("'", "") + currentRun.value.round.split(" ").join("") + "_" + racedate.getUTCFullYear().toString()) + ".png"
 					},
 					"author": {
-						"name": "Current Tournament Standings:",
-						"url": "http://zelda.speedruns.com/tournament-results",
+						"name": "Relay Results:",
+						"url": "http://zelda.speedruns.com/relay-results",
 						"icon_url": basePathAssets + "ZSRLogo.png"
 					}
 				};
@@ -2081,8 +2049,8 @@ function _postResults(channel)
 					.then(() => {
 
 						setTimeout(() => {
-							channel.send("The current tournament standings can be found over at http://zelda.speedruns.com/tournament-results");
-							channel.send("Thanks to all the runners for participating in this tournament on ZSR. Hope to see you all again next race!");	
+							channel.send("The current relay standings can be found over at http://zelda.speedruns.com/relay-results");
+							channel.send("Thanks to all the runners for participating in this relay race on ZSR. Hope to see you all again next evetn!");	
 						}, 3000);	
 					});
 			}
@@ -2093,75 +2061,45 @@ function _postResults(channel)
 		return;
 	
 	//Write new race result into standings.json
-	let standingsPath = path.resolve(process.env.NODECG_ROOT, 'bundles/external-assets/graphics/img/standings/standings.json');
+	let standingsPath = path.resolve(process.env.NODECG_ROOT, 'bundles/external-assets/graphics/img/results/relay/results.json');
 	let json = editJsonFile(standingsPath);
 	if (json.length == 0){
-		json.set("tournament", [{
-			raceCount: 0, 
-			name: currentRun.value.name, 
-			shortName: currentRun.value.shortName, 
-			longName: currentRun.value.longName, 
-			category: currentRun.value.category, 
-			results: [], 
-			standings: []
+		json.set("relayrace", [{
+			results: [],
 		}]);
-		log.info("new Tournament, created JSON!");
 	}	
-		let tournament = json.get("tournament");
-		let raceCount = tournament[0].raceCount;
-		log.info(tournament[0].name);
+		let tournament = json.get("relayrace");
 	
-	if (tournament[0].length == 0) {
-		tournament[0].raceCount = 0;
-		tournament[0].name = currentRun.value.name;
-		tournament[0].shortName = currentRun.value.shortName; 
-		tournament[0].longName = currentRun.value.longName;
-		tournament[0].category = currentRun.value.category;
-		tournament[0].results = [];
-		tournament[0].standings = [];
+	if (relayrace[0].length == 0) {
+		relayrace[0].results = [];
+
 	}
-	if ((!raceCount) || (tournament[0].raceCount === null)) {
-		raceCount = 0;
-	}
-	let resultPage = tournament[0].results;
+
+	let resultPage = relayrace[0].results;
 
 	//Prettyfy results
 	var archiveRanking = [];
 
-	//Finished Runners first
-	console.log("New Racecount: " + (tournament[0].raceCount + 1).toString() + " write data in results!");
 
 	leaderboard.value.ranking.forEach(finishedRunner => {
 
-	if (finishedRunner.status === "Finished")
-		archiveRanking.push(finishedRunner);
+	if ((finishedRunner.status === "Finished") && (finishedRunner.slot == 3))
+		archiveRanking.push({team: finishedRunner.team, status: finishedRunner.status, fullTime: finishedRunner.fullTime, fullTimeFormat: finishedRunner.fulltimeFormat});
 	});
 
 	//Quitters last
 	leaderboard.value.ranking.forEach(finishedRunner => {
 
 	if (finishedRunner.status === "Forfeit")
-		archiveRanking.push({ name: finishedRunner.name, stream: finishedRunner.stream, status: "Forfeit", place: "-", timeFormat: "	" });
+		archiveRanking.push({team: finishedRunner.team, stream: finishedRunner.stream, status: "Forfeit", place: "-", fulltimeFormat: "	" });
 	});
 
-	let resultEntry = {
-	"race": currentRun.value.round,
-	"rankings": archiveRanking
-	};
+	relayrace[0].results.push(archiveRanking);
 
-	if (resultPage)
-	resultPage.unshift(resultEntry);
-	else
-	resultPage = [resultEntry];
 
-	tournament[0].results = resultPage;
-
-	//Increase count
-	raceCount++;
-	tournament[0].raceCount = raceCount;
-	json.set("tournament", tournament);
+	json.set("relayrace", relayrace);
 	json.save();
-	log.info("tournament stats updated!");
+	log.info("relay stats updated!");
 	emitter.eventBus.sendEvent('raceFinished');		
 }
 
