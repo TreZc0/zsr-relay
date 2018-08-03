@@ -187,7 +187,7 @@ function update() {
 
 	const runsPromise = request({
 		uri: nodecg.bundleConfig.useMockData ?
-			'https://dl.dropboxusercontent.com/s/b8r8yhsvqioew31/schedulezsrt.json' :
+			'https://dl.dropboxusercontent.com/s/p9wjqk0u312i91o/schedulerelay.json' :
 			'https://private.gamesdonequick.com/tracker/search',
 		qs: {
 			type: 'run',
@@ -493,14 +493,11 @@ function formatRun(run, formattedRunners) {
 		racetime: run.fields.racetime || 'Unknown',
 		releaseYear: run.fields.release_year || '',
 		runners,
-		round: run.fields.round || 'Unknown',
 		notes: run.fields.tech_notes || '',
 		timernotes: run.fields.timer_notes || '',
 		discord: run.fields.discord || 'Unknown',
 		srcom:	run.fields.srcom || 'Unknown',
 		coop: run.fields.coop || false,
-		quali: run.fields.quali || false,
-		qamount: run.fields.qamount,
 		id: run.pk,
 		pk: run.pk,
 		type: 'run'
