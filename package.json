@@ -65,7 +65,7 @@
     "dashboardPanels": [
       {
         "name": "1. Relay Dashboard",
-        "title": "Tournament Dashboard",
+        "title": "Relay Dashboard",
         "file": "stream-tech-dashboard.html",
         "headerColor": "#2d4e8a",
         "fullbleed": true

@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="style/layout.css">
 	<link rel="import" href="../shared/imports/gsap.html">
 	<link rel="import" href="elements/gdq-nameplate/gdq-nameplate.html">
+	<link rel="import" href="elements/relay-teamplate/relay-teamplate.html">
 	<link rel="import" href="elements/relay-runinfo/relay-runinfo.html">
 	<link rel="import" href="elements/zsr-timer/zsr-timer.html">
 	<link rel="import" href="elements/gdq-twitter/gdq-twitter.html">
@@ -20,27 +21,58 @@
 				z-index: 8;
 			}
 			zsr-aspectboxes:nth-of-type(1) {
+				position:absolute;
 				top: 52px;
-				left: 610px;
+				left: 150px;
 			}
 
 			zsr-aspectboxes:nth-of-type(2) {
+				position:absolute;
 				top: 52px;
-				left: 652px;
+				left: 650px;
 			}
 
 			zsr-aspectboxes:nth-of-type(3) {
+				position:absolute;
 				top: 343px;
-				left: 610px;
+				left: 150px;
 			}
 
 			zsr-aspectboxes:nth-of-type(4) {
+				position:absolute;
 				top: 343px;
-				left: 652px;
+				left: 650px;
+	
+			}
+			relay-teamplate {
+				--zsr-nameplate-width: 130px;
+				z-index: 10;
+			}
+
+			relay-teamplate:nth-of-type(1) {
+				top: 75px;
+				left: 10px;
+			}
+
+			relay-teamplate:nth-of-type(2) {
+				top: 75px;
+				right: 10px;
+			}
+
+			relay-teamplate:nth-of-type(3) {
+				top: 365px;
+				left: 10px;
+			}
+
+			relay-teamplate:nth-of-type(4) {
+				top: 365px;
+				right: 10px;
 			}
 
 			gdq-nameplate {
 				--gdq-nameplate-width: 190px;
+				z-index: 10;
+				opacity: 0.8;
 			}
 
 			gdq-nameplate:nth-of-type(1) {
@@ -64,26 +96,26 @@
 			}
 
 			relay-runinfo {
-				left: 440px;
+				left: 500px;
 				top: 0px;
-				width: 400px;
-				height: 48px;
+				width: 280px;
+				height: 50px;
 			}
 
 			zsr-timer {
-				left: 580px;
-				top: 297px;
-				height: 70px;
-				width: 120px;
+				left: 550px;
+				top: 312px;
+				height: 41px;
+				width: 180px;
 				--zsr-timer-font-size: 32px;
-				z-index: 9;
+				z-index: 20;
 			}
 			
 			zsr-discord-voice {
 				--zsr-discord-voice-min-width: 800px;
 				position: absolute; 
 				left: 240px; 
-				bottom: 20px;
+				bottom: 33px;
 				z-index: 10
 			}
 		</style>
@@ -95,16 +127,20 @@
 		<div style="width: 515px; height: 150px; overflow: visible"> 
 		<zsr-discord-voice tablewidth="800" columnsperline="7"></zsr-discord-voice> </div>
 		<relay-runinfo></relay-runinfo>
-		<zsr-timer></zsr-timer>
 		<zsr-aspectboxes index="0"></zsr-aspectboxes>
 		<zsr-aspectboxes index="1"></zsr-aspectboxes>
 		<zsr-aspectboxes index="2"></zsr-aspectboxes>
 		<zsr-aspectboxes index="3"></zsr-aspectboxes>
+		<relay-teamplate index="0"></relay-teamplate>
+		<relay-teamplate index="1"></relay-teamplate>
+		<relay-teamplate index="2"></relay-teamplate>
+		<relay-teamplate index="3"></relay-teamplate>
 		<gdq-nameplate index="0" attach-left></gdq-nameplate>
 		<gdq-nameplate index="1" attach-right></gdq-nameplate>
 		<gdq-nameplate index="2" attach-left></gdq-nameplate>
 		<gdq-nameplate index="3" attach-right></gdq-nameplate>
 		<img id="foreground" src="img/backgrounds/relay_4_fg.png">
+		<zsr-timer></zsr-timer>
 	</div>
 
 	<script>

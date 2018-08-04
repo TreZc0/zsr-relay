@@ -72,7 +72,7 @@
 			if (newVal.discord == "Unknown")
 				discordserver = false;
 			
-			this.shortName = newVal.shortName;
+			this.name = newVal.name;
 			this.category = newVal.category;
 		}
 

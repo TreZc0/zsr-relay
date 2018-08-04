@@ -10,6 +10,9 @@
 	const twitchPlayer = nodecg.Replicant('twitchPlayer');
 	const gameAudioChannels = nodecg.Replicant('gameAudioChannels');
 
+	const teams = nodecg.Replicant('teams');
+	const runners = nodecg.Replicant('runners');
+
 	class RelayTeamPlate extends Polymer.Element {
 		static get is() {
 			return 'relay-teamplate';
@@ -426,7 +429,9 @@
                leaderboard,
                stopwatch,
                gameAudioChannels,
-               twitchPlayer
+				twitchPlayer,
+					teams,
+				runners
             ];
 
 			let numDeclared = 0;
@@ -442,6 +447,38 @@
 			        }
 			    });
 			});
+		}
+
+		getTeamTotalTime() {
+
+			let foundLastTeamRunner = runners.value.find(runnerAll => {
+				if (runnerAll) {
+
+					let foundMatchingTeamRunner = teams.value.teams[this.index].runners.find(teamRunner => {
+						if (teamRunner)
+							if (teamRunner.name == runnerAll.name)
+								return true;
+
+						return false;
+					});
+
+					if (foundMatchingTeamRunner) {
+
+						if (runnerAll.slot == 3)
+							return true;
+					}
+				}
+
+				return false;
+			});
+
+			if (foundLastTeamRunner) {
+
+				if (foundLastTeamRunner.state == 2)
+					return foundLastTeamRunner.fullTimeFormat;
+			}
+
+			return '-'
 		}
 
 		/*
@@ -480,15 +517,10 @@
 					this.$.namesName.classList.add('hidden');
 					this.$.namesTwitch.classList.remove('hidden');
 
-					const runner = newVal.runners[this.index];
-					if (runner) {
-						this.name = runner.name;
-
-						if (runner.stream) {
-							this.twitch = runner.stream;
-						} else {
-							this.twitch = '';
-						}
+					const team = teams.value.teams[this.index];
+					if (team) {
+						this.name = team.teamname;
+						this.twitch = getTeamTotalTime();
 					} else {
 						this.name = '?';
 						this.twitch = '?';

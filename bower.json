@@ -43,7 +43,8 @@
     "textfit": "^2.3.1",
     "the-grid": "vpusher/the-grid#^1.4.0",
     "vaadin-combo-box": "vaadin/vaadin-combo-box#v2.0.0",
-    "vaadin-grid": "vaadin/vaadin-grid#^3.0.1"
+    "vaadin-grid": "vaadin/vaadin-grid#^3.0.1",
+    "web-animations-js": "^2.3.1"
   },
   "resolutions": {
     "iron-a11y-announcer": "^2.0.0",
