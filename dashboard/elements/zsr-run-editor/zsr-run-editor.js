@@ -14,7 +14,6 @@ class zsrRunEditor extends Polymer.Element {
 
 	loadRun(run) {
 		this.name = run.name;
-		this.round = run.round;
 		this.category = run.category;
 		this.console = run.console;
 		this.releaseYear = run.releaseYear;
@@ -50,7 +49,6 @@ class zsrRunEditor extends Polymer.Element {
 
 		nodecg.sendMessage('modifyRun', {
 			name: this.name,
-			round: this.round,
 			category: this.category,
 			console: this.console,
 			releaseYear: this.releaseYear,

@@ -3,6 +3,7 @@
 <link rel="import" href="../../../shared/imports/easeljs.html">
 <link rel="import" href="../../../shared/style/gdq-text-styles.html">
 <link rel="import" href="../../../bower_components/sc-fitted-text/sc-fitted-text.html">
+<link rel="import" href="../../../bower_components/polymer/lib/mixins/mutable-data.html">
 
 <!--
 Attached left, right, bottom or none
@@ -19,6 +20,7 @@ Audio indicator comes out from side opposide placement indicator
 <dom-module id="relay-teamplate">
 	<template>
 		<style include="zsr-text-styles">
+
 			:host {
 				position: absolute;
 				display: flex;
@@ -75,6 +77,7 @@ Audio indicator comes out from side opposide placement indicator
 				min-width: 1px;
 				box-sizing: border-box;
 			}
+
 			#namesTwitch {
 				@apply --layout-horizontal;
 			}
@@ -99,17 +102,17 @@ Audio indicator comes out from side opposide placement indicator
 				-webkit-mask: url("img/time-mask-right.png") no-repeat;
 			}
 
-			#timeShine:after {
-				position: absolute;
-				top: 0;
-				right: 0;
-				content: '';
-				width: 37px;
-				height: 100%;
-				background: white;
-				transform: skewX(-22deg);
-				will-change: transform;
-			}
+				#timeShine:after {
+					position: absolute;
+					top: 0;
+					right: 0;
+					content: '';
+					width: 37px;
+					height: 100%;
+					background: white;
+					transform: skewX(-22deg);
+					will-change: transform;
+				}
 
 			#time {
 				display: flex;
@@ -119,27 +122,27 @@ Audio indicator comes out from side opposide placement indicator
 				position: relative;
 			}
 
-			#time:before {
-				content: '';
-				height: 100%;
-				width: 1px;
-				background: url("img/time-left.png");
-			}
+				#time:before {
+					content: '';
+					height: 100%;
+					width: 1px;
+					background: url("img/time-left.png");
+				}
 
-			#time:after {
-				content: '';
-				height: 100%;
-				width: 1px;
-				background: url("img/time-right.png");
-			}
+				#time:after {
+					content: '';
+					height: 100%;
+					width: 1px;
+					background: url("img/time-right.png");
+				}
 
-			#time span {
-				font-weight: 700;
-				flex-grow: 1;
-				text-align: center;
-				padding-right: 10px;
-				line-height: 32px;
-			}
+				#time span {
+					font-weight: 700;
+					flex-grow: 1;
+					text-align: center;
+					padding-right: 10px;
+					line-height: 32px;
+				}
 
 			#medal {
 				position: absolute;
@@ -150,13 +153,19 @@ Audio indicator comes out from side opposide placement indicator
 				background-repeat: no-repeat;
 			}
 
-			#medal.shine {
-				animation: shine 334ms steps(20);
-			}
+				#medal.shine {
+					animation: shine 334ms steps(20);
+				}
 
 			@keyframes shine {
-				from { background-position-x: 0; }
-				to { background-position-x: -520px; } /* <-- width of spritesheet */
+				from {
+					background-position-x: 0;
+				}
+
+				to {
+					background-position-x: -520px;
+				}
+				/* <-- width of spritesheet */
 			}
 
 
@@ -165,6 +174,7 @@ Audio indicator comes out from side opposide placement indicator
 			:host([attach-right]) #timeClip {
 				display: block;
 			}
+
 			:host([attach-bottom]) #timeClip {
 				display: block;
 			}
@@ -179,10 +189,10 @@ Audio indicator comes out from side opposide placement indicator
 				right: 0;
 			}
 
-			:host([attach-left]) #time span {
-				padding-right: 0;
-				padding-left: 10px;
-			}
+				:host([attach-left]) #time span {
+					padding-right: 0;
+					padding-left: 10px;
+				}
 
 			:host([attach-left]) #timeShine {
 				right: 0;
@@ -190,15 +200,16 @@ Audio indicator comes out from side opposide placement indicator
 				-webkit-mask: url("img/time-mask-left.png") no-repeat right;
 			}
 
-			:host([attach-left]) #timeShine:after {
-				transform: skewX(22deg);
-				left: 0;
-				right: auto;
-			}
+				:host([attach-left]) #timeShine:after {
+					transform: skewX(22deg);
+					left: 0;
+					right: auto;
+				}
 
 			:host([attach-right]) #timeClip {
 				right: -150px;
 			}
+
 			:host([attach-bottom]) #timeClip {
 				bottom: -39px;
 				left: 23px;
@@ -230,13 +241,13 @@ Audio indicator comes out from side opposide placement indicator
 				background: url("img/time-center-forfeit.png");
 			}
 
-			:host([forfeit]) #time:before {
-				background: url("img/time-left-forfeit.png");
-			}
+				:host([forfeit]) #time:before {
+					background: url("img/time-left-forfeit.png");
+				}
 
-			:host([forfeit]) #time:after {
-				background: url("img/time-right-forfeit.png");
-			}
+				:host([forfeit]) #time:after {
+					background: url("img/time-right-forfeit.png");
+				}
 
 			:host([audio][attach-left]) #rightCap-img {
 				transform: translateX(-6px);
@@ -249,44 +260,61 @@ Audio indicator comes out from side opposide placement indicator
 			:host([coop]) #timeClip {
 				display: none;
 			}
-			
+
 			.hidden {
 				position: absolute;
 				opacity: 0 !important;
 				pointer-events: none;
 			}
+
 			[hidden] {
 				display: none !important;
 			}
-		</style>
 
+			table {
+				padding-left: 10px;
+				padding-right: 10px;
+			}
+		</style>
 		<div id="main">
 			<div id="leftCapContainer" hidden="[[attachLeft]]">
 				<canvas id="leftCap" width="46" height="39"></canvas>
 			</div>
-
 			<div id="body">
 				<div id="names">
-					<sc-fitted-text  id="namesName" text="[[name]]" align="center" style="position: absolute; top: 7px;"></sc-fitted-text>
+					<sc-fitted-text id="namesName" text="[[name]]" align="center" style="position: absolute; top: 7px;"></sc-fitted-text>
 					<div id="namesTwitch">
 						<img src="[[importPath]]img/twitch.png" style="position: relative; top: 7px;">
 						<sc-fitted-text text="[[twitch]]" style="position: relative; top: 7px; left:2px;"></sc-fitted-text>
 					</div>
 				</div>
 			</div>
+			<table>
+				<template is="dom-repeat" items="[[teamMembers]]" mutable-data>
+					<tr>
+						<template is="dom-repeat" items="[[item]]" mutable-data>
+							<td id="td_[[item.id]]">
+								<div id="container_[[item.id]]" class="container" tabindex="0">
+									<sc-fitted-text class="fitted" id="name_[[item.id]]" text="[[item.memberString]]" max-width="[[textMaxLength]]"></sc-fitted-text>
+								</div>
+							</td>
+						</template>
+					</tr>
+				</template>
+			</table>
 
 			<div id="rightCapContainer" hidden="[[attachRight]]">
 				<canvas id="rightCap" width="46" height="39"></canvas>
 			</div>
 		</div>
 
-		<div id="timeClip">
-			<div id="time" class="box-shadow">
-				<span class="shadow2">[[time]]</span>
-				<div id="medal" style$="background-image: url([[calcMedalImage(place, forfeit)]])"></div>
-			</div>
-			<div id="timeShine"></div>
+	<div id="timeClip">
+		<div id="time" class="box-shadow">
+			<span class="shadow2">[[time]]</span>
+			<div id="medal" style$="background-image: url([[calcMedalImage(place, forfeit)]])"></div>
 		</div>
+		<div id="timeShine"></div>
+	</div>
 	</template>
 
 	<script src="relay-teamplate.js"></script>

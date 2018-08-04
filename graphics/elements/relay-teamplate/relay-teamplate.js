@@ -13,7 +13,7 @@
 	const teams = nodecg.Replicant('teams');
 	const runners = nodecg.Replicant('runners');
 
-	class RelayTeamPlate extends Polymer.Element {
+	class RelayTeamPlate extends Polymer.MutableData(Polymer.Element) {
 		static get is() {
 			return 'relay-teamplate';
 		}
@@ -76,6 +76,29 @@
 						return new TimelineLite({autoRemoveChildren: true});
 					},
 					readOnly: true
+				},
+				columnsperline: {
+					type: Number,
+					value: 1
+				},
+				tablewidth: {
+					type: Number,
+					value: 300
+				},
+				rowWidth: {
+					type: Number,
+					reflectToAttribute: true,
+					value: 200
+				},
+				textMaxLength: {
+					type: Number,
+					reflectToAttribute: true,
+					value: 130
+				},
+				teamMembers: {
+					type: Array,
+					reflectToAttribute: true,
+					value: []
 				}
 			};
 		}
@@ -429,9 +452,9 @@
                leaderboard,
                stopwatch,
                gameAudioChannels,
-				twitchPlayer,
-					teams,
-				runners
+			   twitchPlayer,
+			   teams,
+			   runners
             ];
 
 			let numDeclared = 0;
@@ -443,7 +466,9 @@
 			        if (numDeclared >= replicants.length)
 			        {
 			            currentRun.on('change', this.currentRunChanged.bind(this));
-			            leaderboard.on('change', this.rankingsChanged.bind(this));
+						leaderboard.on('change', this.rankingsChanged.bind(this));
+						runners.on('change', this.runnersChanged.bind(this));
+						teams.on('change', this.teamsChanged.bind(this));
 			        }
 			    });
 			});
@@ -478,7 +503,130 @@
 					return foundLastTeamRunner.fullTimeFormat;
 			}
 
-			return '-'
+			return '-';
+		}
+
+		getTimeForTeamMember(runnerName) {
+
+			let foundTeamRunner = runners.value.find(runnerAll => {
+				if (runnerAll) {
+
+					if (runnerAll.name == runnerName)
+						return true;
+				}
+
+				return false;
+			});
+
+			if (foundTeamRunner) {
+
+				if (foundTeamRunner.state == 2)
+					return foundTeamRunner.timeFormat;
+			}
+
+			return '-';
+		}
+
+		generateTeamTable() {
+
+			this.teamMembers.length = 0;
+
+			const team = teams.value.teams[this.index];		
+	
+			let lineCount = team.runners.length;
+
+			console.log("Need " + lineCount + " lines to render this team array!");
+
+			let columnCount = this.columnsperline;
+
+			//Calculate available screen estate for each row and name field
+			this.rowWidth = this.tablewidth - 20; //both table borders combined (left/right table margin a 10 pixels)
+			this.textMaxLength = this.rowWidth;
+			this.rowWidth = Math.floor(this.rowWidth / columnCount); //rows take 1/x of the space left e.g. 50% each for 2 columns per line, now hardcoded
+
+			this.textMaxLength -= ((columnCount - 1) * 10); //10 px padding for every extra column after the first one to create a gap
+			//this.textMaxLength -= columnCount * 42; //for every avatar and its padding
+			this.textMaxLength = Math.floor(this.textMaxLength / columnCount);
+
+			console.log("This table with " + columnCount + " columns per line and a base field size of " + this.tablewidth + " pixels has " + this.textMaxLength + " pixels of space per name field and " + this.rowWidth + " pixels for every row!");
+
+			let arrayIndex = 0;
+			let newArray = [];
+
+			for (var i = 0; i < 1; i++) {
+				let line = [];
+
+				for (var n = 0; n < this.columnsperline; n++) {
+
+					let column = { id: arrayIndex, memberString: "" };
+					let finalString = team.runners[arrayIndex].name;
+
+					finalString = finalString.concat(" (" + team.runners[arrayIndex].game + ") ");
+					finalString = finalString.concat(this.getTimeForTeamMember(team.runners[arrayIndex].name));
+
+					column.memberString = finalString;
+
+					console.log("add string " + column.memberString + " to line " + i);
+
+					line.push(column);
+
+					arrayIndex++;
+				}
+
+				newArray.push(line);
+			}
+
+			this.set("teamMembers", newArray);
+			//this.notifyPath("teamMembers", this.teamMembers);
+
+			setTimeout(() => { //delay so html elements can render first before updating it
+
+				this.teamMembers.forEach(line => {
+					line.forEach(entry => {
+						Polymer.dom(this.root).querySelector("#td_" + entry.id).style.minWidth = this.rowWidth.toString() + "px";
+					});
+				});
+
+				/*
+				if (columnCount < this.columnsperline) {
+					this.teamMembers.forEach(line => {
+						line.forEach(entry => {
+							Polymer.dom(this.root).querySelector("#container_" + entry.id).style.display = "table";
+							Polymer.dom(this.root).querySelector("#container_" + entry.id).style.margin = "0 auto -50px";
+						});
+					});
+				}
+				*/
+
+			}, 500);
+		}
+
+		setupTeamData() {
+
+			const team = teams.value.teams[this.index];
+			if (team) {
+				this.name = team.teamname;
+				this.twitch = this.getTeamTotalTime();
+
+				this.generateTeamTable();
+			} else {
+				this.name = '?';
+				this.twitch = '?';
+				this.teamMembers.length = 0;
+			}
+		}
+
+		runnersChanged(newVal, oldVal) {
+
+			if (newVal)
+				this.setupTeamData();
+
+		}
+
+		teamsChanged(newVal, oldVal) {
+
+			if (newVal)
+				this.setupTeamData();
 		}
 
 		/*
@@ -510,21 +658,14 @@
 				}
 			});
 
+			this.setupTeamData();
+
 			TweenLite.to(this.$.names, NAME_FADE_DURATION, {
 				opacity: 0,
 				ease: NAME_FADE_OUT_EASE,
 				onComplete: function () {
 					this.$.namesName.classList.add('hidden');
 					this.$.namesTwitch.classList.remove('hidden');
-
-					const team = teams.value.teams[this.index];
-					if (team) {
-						this.name = team.teamname;
-						this.twitch = getTeamTotalTime();
-					} else {
-						this.name = '?';
-						this.twitch = '?';
-					}
 
 					if (!this.twitch) {
 						this.nameTL.pause();

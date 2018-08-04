@@ -30,7 +30,6 @@ class zsrScheduleRuninfo extends Polymer.Element {
 		this.console = run.console;
 		this.runners = run.runners;
 		this.releaseYear = run.releaseYear;
-		this.round = run.round;
 		this.category = run.category;
 		this.discord = run.discord;
 		this.srcom = run.srcom;
