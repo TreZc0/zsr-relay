@@ -41,7 +41,7 @@ const voiceActivity = nodecg.Replicant('voiceActivity', {
 
 const bot = new Discord.Client();
 
-const testMode = true; //TEST MODE; TURN OFF WHEN RUNNING SERVER IN PRODUCTION
+const testMode = false; //TEST MODE; TURN OFF WHEN RUNNING SERVER IN PRODUCTION
 
 const zsrBotToken = nodecg.bundleConfig.discordBotToken;
 const zsrServerID = "244939773121265664";
@@ -238,6 +238,11 @@ function signupChannel(message) {
 				runners.value.length = 0;
 			else
 				runners.value = [];
+			
+			if (teams.value)
+				teams.value.teams.length = 0;
+			else
+				teams.value.teams = [];
 
 			leaderboard.value.ranking.length = 0;
 
@@ -272,7 +277,7 @@ function signupChannel(message) {
 
 			const embed = {
 				"title": "**Race Signup is now open**",
-				"description": "The next race will be " + currentRun.value.round + " of the " + currentRun.value.name + " " + currentRun.value.category + " on " + racedate.toUTCString().replace("GMT","UTC") + "."
+				"description": "The next race will be a " + currentRun.value.name + " " + currentRun.value.category + " on " + racedate.toUTCString().replace("GMT","UTC") + "."
 					+ "\n\nFeel free to participate using the following commands:"
 					+ "```md\n[!enter gamename](Enters you into the race - replace gamename with your game (OoT3D, MM3D, TWWHD, TPHD))\n[!join commentary](Apply for commentary role)\n[!leave commentary](Remove commentary role)"
 					+ "\n[!show profile](View your race profile)\n[!update profile](Updates your race profile)\n[!unregister](Deletes your Auth data and roles)```",
@@ -618,7 +623,7 @@ function raceChannel(message) {
 	//ADMIN COMMANDS
 	if (message.member.hasPermission("MANAGE_CHANNELS")) {
 		if (message.content.toLowerCase() === "!commands") {
-			message.reply("ADMIN: [!clear | !race start | !race stop | !race finished]\nUSER: [!ready | !unready | !done | !undone | !quit]");
+			message.reply("ADMIN: [!clear | !race start | !race stop | !race finished]\nUSER: [!done | !undone | !quit]");
 			return;
 		}
 		else if (message.content.toLowerCase() === "!clear") {
@@ -642,17 +647,6 @@ function raceChannel(message) {
 				return;
 			}
 
-			let readiedUpCount = runners.value.filter(function (runner) {
-				if (runner.state == 0)
-					return false;
-				else
-					return true;
-			}).length;
-
-			if (readiedUpCount != runners.value.length) {
-				message.reply("Not everyone has readied up yet!");
-			}
-			else {
 				discordRep.value.raceHasStarted = true;
 
 				message.channel.send("ATTENTION", { tts: true })
@@ -719,9 +713,6 @@ function raceChannel(message) {
 								}, 1000);
 							});
 					});
-			}
-
-			return;
 		}
 		else if (message.content.toLowerCase() === "!race stop") {
 			if (!discordRep.value.raceHasStarted) {
@@ -824,81 +815,11 @@ function raceChannel(message) {
 
 			return;
 		}
+	
 	}
-
 	//USER COMMANDS
 	if (message.content.toLowerCase() === "!commands") {
-		message.reply("[!ready | !unready | !done | !undone | !quit]");
-	}
-	else if (message.content.toLowerCase() === "!ready") {
-		if (!discordRep.value.raceSetup || discordRep.value.raceHasStarted) {
-			message.reply("You cannot perform this action right now!");
-			return;
-		}
-
-		if (message.member.roles.has(zsrRaceEnteredID)) {
-			let foundRunner = runners.value.find(runner => {
-				if (runner)
-					if (runner.id === message.author.id)
-						return true;
-
-				return false;
-			});
-
-			if (foundRunner)
-				foundRunner.state = 1;
-
-			message.member.addRole(zsrRaceReadyID)
-				.then(() => {
-
-					message.member.removeRole(zsrRaceEnteredID)
-						.then(() => {
-
-							message.channel.send("✅ **" + message.member.displayName + "** is now readied up ✅");
-						});
-				});
-		}
-		else if (message.member.roles.has(zsrRaceReadyID)) {
-			message.reply("You are already readied up!");
-		}
-		else {
-			message.reply("You are not a part of this race!");
-		}
-	}
-	else if (message.content.toLowerCase() === "!unready") {
-		if (!discordRep.value.raceSetup || discordRep.value.raceHasStarted) {
-			message.reply("You cannot perform this action right now!");
-			return;
-		}
-
-		if (message.member.roles.has(zsrRaceReadyID)) {
-			let foundRunner = runners.value.find(runner => {
-				if (runner)
-					if (runner.id === message.author.id)
-						return true;
-
-				return false;
-			});
-
-			if (foundRunner)
-				foundRunner.state = 0;
-
-			message.member.addRole(zsrRaceEnteredID)
-				.then(() => {
-
-					message.member.removeRole(zsrRaceReadyID)
-						.then(() => {
-
-							message.channel.send("❎ **" + message.member.displayName + "** has unreadied ❎");
-						});
-				});
-		}
-		else if (message.member.roles.has(zsrRaceEnteredID)) {
-			message.reply("You weren't readied up in the first place!");
-		}
-		else {
-			message.reply("You are not a part of this race!");
-		}
+		message.reply("[!done | !undone | !quit]");
 	}
 	else if (message.content.toLowerCase() === "!done") {
 		if (discordRep.value.raceFinished || !discordRep.value.raceInProgress) {
@@ -906,7 +827,7 @@ function raceChannel(message) {
 			return;
 		}
 
-		if (message.member.roles.has(zsrRaceReadyID))
+		if (message.member.roles.has(zsrRaceEnteredID))
 		{
 			let foundRunner = runners.value.find(runner => {
 				if (runner)
@@ -927,16 +848,23 @@ function raceChannel(message) {
 					} else {
 						let prevRunner = runners.value.find(runner => {
 							if (runner)
-								if ((runner.team == foundRunner.team) && (runner.slot == (foundRunner.slot-1)))
+								if ((runner.team == foundRunner.team) && (runner.slot == (foundRunner.slot-1) && (runner.state == 2)))
 								return true;
 							return false;
+
 						});
+						if (!prevRunner) {
+							message.reply("It's not your turn yet! Stop cheating :P");
+							return;
+						}
 						let indivTime = stopwatch.value.raw - prevRunner.time
 						foundRunner.time = indivTime;
 						foundRunner.fullTime = stopwatch.value.raw;
 						foundRunner.timeFormat = new Date(indivTime * 1000).toISOString().substr(11, 8);
 						foundRunner.fullTimeFormat = stopwatch.value.formatted;
 					};
+					if (foundRunner.slot < 3)
+						message.reply("Next runner for " + foundRunner.team +" can now start their run!");
 					//Calc placement
 					foundRunner.place = 0;
 
@@ -948,22 +876,34 @@ function raceChannel(message) {
 					});
 
 					foundRunner.place += 1;
+					if (foundRunner.slot == 3) {
+						let teamname;
 
-					log.info("New Runner " + foundRunner.name + " Status: " + foundRunner.state.toString() + " (Finished) Place: " + foundRunner.place.toString() + " Time: " + foundRunner.timeFormat.toString() + " ; Raw Time: " + stopwatch.value.raw);
+						switch(foundRunner.team){
+							case "Team 1":
+								teamname = "The CoolCat Team";
+							break;
+							case "Team 2":
+								teamname = "The B-Team";
+							break;
+							case "Team 3":
+								teamname = "HD-Daddies";
+							break;
+							case "Team 4":
+								teamname = "HD-Rumble";
+							break;
+						}
+						leaderboard.value.ranking.push({
+							name: teamname,
+							status: "Finished",
+							place: foundRunner.place,
+							fullTime: foundRunner.fullTime,
+							fullTimeFormat: foundRunner.fullTimeFormat
+						});
+						message.channel.send(teamname + " finished the relay race in " + foundRunner.place + (". place with a time of " + foundRunner.fullTimeFormat));
+					}
 
-					leaderboard.value.ranking.push({
-						name: foundRunner.name,
-						stream: foundRunner.stream,
-						status: "Finished",
-						place: foundRunner.place,
-						time: foundRunner.time,
-						timeFormat: foundRunner.timeFormat,
-						fullTime: foundRunner.fullTime,
-						fullTimeFormat: foundRunner.fulltimeFormat
-					})
-					
-
-					message.channel.send("```diff\n- " + foundRunner.name + " has finished in " + foundRunner.place + ". place with a time of " + foundRunner.timeFormat + "! -```")
+					message.channel.send("```diff\n- " + foundRunner.name + " has finished " + foundRunner.game + " with a time of " + foundRunner.timeFormat + "! -```")
 						.then(() => {
 							//notify next runner via PM
 							if (foundRunner.slot < 3) {
@@ -1011,15 +951,16 @@ function raceChannel(message) {
 					foundRunner.timeFormat = "Quit";
 
 					log.info("New Runner " + foundRunner.name + " Status: " + foundRunner.state.toString() + " (Forfeited) Place: " + foundRunner.place.toString() + " Time: " + foundRunner.timeFormat.toString());
-
-					leaderboard.value.ranking.push({
-						name: foundRunner.name,
-						stream: foundRunner.stream,
-						status: "Forfeit",
-						place: foundRunner.place,
-						time: foundRunner.time,
-						timeFormat: foundRunner.timeFormat
-					})
+					if (foundRunner.slot == 3) {
+						leaderboard.value.ranking.push({
+							name: foundRunner.name,
+							stream: foundRunner.stream,
+							status: "Forfeit",
+							place: foundRunner.place,
+							time: foundRunner.time,
+							timeFormat: foundRunner.timeFormat
+						})
+					}
 
 					message.channel.send("```diff\n- " + foundRunner.name + " has forfeited from the race😢 -```")
 						.then(() => {
@@ -1044,7 +985,7 @@ function raceChannel(message) {
 			return;
 		}
 
-		if (message.member.roles.has(zsrRaceReadyID)) {
+		if (message.member.roles.has(zsrRaceEnteredID)) {
 			let foundRunner = runners.value.find(runner => {
 				if (runner)
 					if (runner.id === message.author.id)
@@ -1390,7 +1331,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 
 		//Add runner to list or update him if found
 		if (foundRunner) {
-
+			
 			if (!adminAdd)
 				message.reply("Changes in your profile have been recorded");
 			else
@@ -1401,12 +1342,23 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 			foundRunner.discord = userObj.tag;
 		}
 		else {
+			let gameName;
+			if (adminAdd) {
+				gameName = message.content.split(" ")[3];
+			}
+			else {
+				gameName = message.content.split(" ")[1];
+			}
+			if (gameName == undefined) {
+				message.reply("You didn't specify a game!")
+				return;
+			}
 			let roleIDs = ["244954316266274816", "244954321152770069", "244954323501580298", "244954325116387329"];
 			let team;
-			let gameName = message.content.split(" ")[1];
+			
 			let slot;
 			switch(gameName.toLowerCase()) {
-				case "oo3d":
+				case "oot3d":
 					slot = 0;
 				break;
 				case "mm3d":
@@ -1423,6 +1375,8 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 				if (message.member.roles.has(roleIDs[i]))
 				team = "Team " + (i+1);
 			}
+			if (adminAdd)
+				team = message.content.split(" ")[4] + " " + message.content.split(" ")[5]; 
 
 			var teamArray = {};
 			var playerArray = {
@@ -1431,18 +1385,16 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 				stream: twitch.name,
 				discord: userObj.tag,
 				game: gameName,
+				team: team,
 				slot: slot,
-				state: 0, //0 = unready, 1 = ready, 2 = done, 3 = forfeited
+				state: 1, //0 = unready, 1 = ready, 2 = done, 3 = forfeited
 				place: 0,
 				time: 0,
 				fullTime: 0,
 				timeFormat: "",
 				fullTimeFormat: ""
 			};
-			if (gameName == undefined) {
-				message.reply("You didn't specify a game!")
-				return;
-			}
+			 
 			if (!adminAdd) {
 				if (!message.member.roles.some(r=>roleIDs.includes(r.id))) {
 					message.reply("You are not part of a relay team!");
@@ -1470,7 +1422,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					team: team,
 					game: gameName,
 					slot: slot,
-					state: 0, //0 = unready, 1 = ready, 2 = done, 3 = forfeited
+					state: 1, //0 = unready, 1 = ready, 2 = done, 3 = forfeited
 					place: 0,
 					time: 0,
 					fullTime: 0,
@@ -1488,7 +1440,7 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					team: team,
 					game: gameName,
 					slot: slot,
-					state: 0,
+					state: 1,
 					place: 0,
 					time: 0,
 					fullTime: 0,
@@ -1518,7 +1470,6 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					teamArray[teamIndex].runners.push(playerArray);
 					teams.value.teams.push(teamArray[teamIndex]);
 					_sortTeams();
-					_sortRunners(teamIndex);
 				} else if (teamIndex != (teams.value.teams[teamIndex].id)) {
 					teamArray[teamIndex] = {
 						teamname: team,
@@ -1528,7 +1479,6 @@ function addRunnerToRace(message, userObj, memberObj, accessToken, adminAdd) {
 					teamArray[teamIndex].runners.push(playerArray);
 					teams.value.teams.push(teamArray[teamIndex]);
 					_sortTeams();
-					_sortRunners(teamIndex);
 				} else {	
 					teams.value.teams[teamIndex].runners.push(playerArray);
 					_sortRunners(teamIndex);
@@ -1568,26 +1518,29 @@ function _sortRunners(index)
 	var ordering = {};
 	var sortOrder = ['oot3d', 'mm3d', 'twwhd', 'tphd'];
 	for (var i=0; i<sortOrder.length; i++)
-    	ordering[sortOrder[i]] = i;
-	teams.value.teams[index].runners.sort(function(a, b) {
-		log.info(a.game.toLowerCase() + " " + b.game.toLowerCase());
-   		return (ordering[a.game.toLowerCase()] - ordering[b.game.toLowerCase()]);
-	});
-
+		ordering[sortOrder[i]] = i;
+	if (teams.value.teams[index].runners.length > 1) {
+		teams.value.teams[index].runners.sort(function(a, b) {
+			log.info(a.game.toLowerCase() + " " + b.game.toLowerCase());
+			return (ordering[a.game.toLowerCase()] - ordering[b.game.toLowerCase()]);
+		});
+	}
 }
 
 function _sortTeams()
 {
-	teams.value.teams.sort(function(a,b) {
-		if (a.id > b.id) {
-			return 1;
-		  }
-		  if (a.id < b.id) {
-			return -1;
-		  }
-		  // a muss gleich b sein
-		  return 0;
-		});
+	if (teams.value.teams.length > 1) {
+		teams.value.teams.sort(function(a,b) {
+			if (a.id > b.id) {
+				return 1;
+			}
+			if (a.id < b.id) {
+				return -1;
+			}
+			// a muss gleich b sein
+			return 0;
+			});
+	}
 }
 nodecg.listenFor('clearRaceChat', _clearChat);
 
@@ -1766,7 +1719,7 @@ function _initRace(guild, message) {
 		}
 
 		var embed = {
-			"description": "<@&" + zsrRaceEnteredID + "> **Starting soon: " + raceName + " " + currentRun.value.category + " Race**\n\nPlease use the following commands at your discretion:```md\n[!ready](Be ready to start at a moments notice)\n[!unready](Unready asap if you get distracted)\n[!done](As soon as you finish - this will inform the next runner in your team to start their run)\n[!undone](If you made a mistake)\n[!quit](In case you cannot finish your run)```Happy Racing!!",
+			"description": "<@&" + zsrRaceEnteredID + "> **Starting soon: " + raceName + " " + currentRun.value.category + " Race**\n\nPlease use the following commands at your discretion:```md\n[!done](As soon as you finish - this will inform the next runner in your team to start their run)\n[!undone](If you made a mistake)\n[!quit](In case you cannot finish your run)```Happy Racing!!",
 			"url": "https://speedrun.com/" + currentRun.value.srcom,
 			"color": 16192000,
 			"thumbnail": {
@@ -1820,8 +1773,8 @@ function _initRace(guild, message) {
 			.catch(error => log.info(error));
 
 		raceMembers.forEach(runner => {
-
-			guild.members.get(runner.id).send("🔔🏁\nHey there " + runner.name + ". You have registered for " + "**" + raceName + " " + currentRun.value.category + " Race** which is about to begin!\nPlease head into the 👉<#376157053653221397> now and ready up 😀");
+			if (runner.slot == 0)
+			guild.members.get(runner.id).send("🔔🏁\nHey there " + runner.name + ". You have registered for " + "**" + raceName + " " + currentRun.value.category + " Race** which is about to begin and you are the first runner of your team!\nPlease head into the 👉<#376157053653221397> now and ready up 😀");
 
 		});
 
@@ -1942,12 +1895,12 @@ function _notifyRunner(finishedRunner)
 				return true;	
 		return false;
 	});
-	guild.members.get(nextRunner.id).send("GOGOGO! Your teammate just finished! Remember to enter !done as soon as possible after you finished your run as it determines when your teammate is allowed to start!");
+	bot.guilds.get(zsrServerID).members.get(nextRunner.id).send("GOGOGO! Your teammate just finished! Remember to enter !done as soon as possible after you finished your run as it determines when your teammate is allowed to start!");
 }
 
 function _raceDoneCheck(channel)
 {
-	if (leaderboard.value.ranking.length == runners.value.length)
+	if (leaderboard.value.ranking.length >= 4)
 	{
 		discordRep.value.raceFinished = true;
 
@@ -2009,58 +1962,57 @@ function _raceDoneCheck(channel)
 function _postResults(channel)
 {
 	discordRep.value.raceInProgress = false; //lock every other command from now on
-	var screenshotdelay;
 	resultSnap.value.takeSnap = true;
-
+	var screenshotdelay;
 	resultSnap.on('change', newVal => {
 
 		if (!newVal)
 			return;
-		screenshotdelay = setTimeout(() => {
-			if (newVal.snapSuccess)
-			{
-				newVal.snapSuccess = false;
+			screenshotdelay = setTimeout(() => {
+				if (newVal.snapSuccess)
+				{
+					newVal.snapSuccess = false;
 
-				var postDate = JSON.parse(JSON.stringify(new Date()));
+					var postDate = JSON.parse(JSON.stringify(new Date()));
 
-				var msec = Date.parse(currentRun.value.racetime);
-				var racedate = new Date(msec);
-				const embed = {
-					"title": currentRun.value.name + " " + currentRun.value.category + " - " + currentRun.value.round + " on " + racedate.toUTCString().replace("GMT","UTC") + ".",
-					"url": "http://zelda.speedruns.com/relay-results",
-					"color": 1369976,
-					"timestamp": postDate,
-					"footer": {
-						"icon_url": basePathAssets + "bot_iconotspm.png",
-						"text": "This race was managed by ZSRBot"
-					},
-					"thumbnail": {
-						"url": basePathIcon.concat(currentRun.value.shortName) + ".png"
-					},
-					"image": {
-						"url": basePathAssets.concat("results/relay/" + currentRun.value.shortName + "_" + currentRun.value.category.split(" ").join("").replace("%", "").replace("'", "") + currentRun.value.round.split(" ").join("") + "_" + racedate.getUTCFullYear().toString()) + ".png"
-					},
-					"author": {
-						"name": "Relay Results:",
+					var msec = Date.parse(currentRun.value.racetime);
+					var racedate = new Date(msec);
+					const embed = {
+						"title": currentRun.value.name + " - " + currentRun.value.category + " on " + racedate.toUTCString().replace("GMT","UTC"),
 						"url": "http://zelda.speedruns.com/relay-results",
-						"icon_url": basePathAssets + "ZSRLogo.png"
-					}
-				};
-				channel.send({ embed })
-					.then(() => {
+						"color": 1369976,
+						"timestamp": postDate,
+						"footer": {
+							"icon_url": basePathAssets + "bot_iconotspm.png",
+							"text": "This race was managed by ZSRBot"
+						},
+						"thumbnail": {
+							"url": basePathIcon.concat(currentRun.value.shortName) + ".png"
+						},
+						"image": {
+							"url": basePathAssets.concat("results/relay/" + currentRun.value.shortName + "_" + racedate.getUTCFullYear().toString()) + ".png"
+						},
+						"author": {
+							"name": "Relay Results:",
+							"url": "http://zelda.speedruns.com/relay-results",
+							"icon_url": basePathAssets + "ZSRLogo.png"
+						}
+					};
+					channel.send({ embed })
+						.then(() => {
 
-						setTimeout(() => {
-							channel.send("The current relay standings can be found over at http://zelda.speedruns.com/relay-results");
-							channel.send("Thanks to all the runners for participating in this relay race on ZSR. Hope to see you all again next evetn!");	
-						}, 3000);	
-					});
-			}
-		}, 2500);
+							setTimeout(() => {
+								//channel.send("The current relay standings can be found over at http://zelda.speedruns.com/relay-results");
+								channel.send("Thanks to all the runners for participating in this relay race on ZSR. Hope to see you all again next event!");	
+							}, 3000);	
+						});
+				}	
+			}, 5000);
 	});
 	
 	if (testMode)
 		return;
-	
+	/*
 	//Write new race result into standings.json
 	let standingsPath = path.resolve(process.env.NODECG_ROOT, 'bundles/external-assets/graphics/img/results/relay/results.json');
 	let json = editJsonFile(standingsPath);
@@ -2101,7 +2053,8 @@ function _postResults(channel)
 	json.set("relayrace", relayrace);
 	json.save();
 	log.info("relay stats updated!");
-	emitter.eventBus.sendEvent('raceFinished');		
+	emitter.eventBus.sendEvent('raceFinished');	
+	*/	
 }
 
 nodecg.listenFor('assignmentsChanged', _assignmentsChanged);

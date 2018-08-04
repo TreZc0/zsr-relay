@@ -553,17 +553,20 @@
 			let arrayIndex = 0;
 			let newArray = [];
 
-			for (var i = 0; i < 1; i++) {
+			for (var i = 0; i < lineCount; i++) {
 				let line = [];
 
 				for (var n = 0; n < this.columnsperline; n++) {
 
 					let column = { id: arrayIndex, memberString: "" };
 					let finalString = team.runners[arrayIndex].name;
-
-					finalString = finalString.concat(" (" + team.runners[arrayIndex].game + ") ");
-					finalString = finalString.concat(this.getTimeForTeamMember(team.runners[arrayIndex].name));
-
+					let time = this.getTimeForTeamMember(team.runners[arrayIndex].name)
+					finalString = finalString.concat(" ");
+					if (time == "-") {
+						finalString = finalString.concat("(" + team.runners[arrayIndex].game + ")");
+					} else {
+						finalString = finalString.concat(" -- " + time);
+					}
 					column.memberString = finalString;
 
 					console.log("add string " + column.memberString + " to line " + i);

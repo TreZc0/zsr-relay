@@ -41,9 +41,10 @@ currentRun.on('change', newVal =>
 	if (!newVal)
 		return;
 
-	if (leaderboard.value.runName == "" || leaderboard.value.runName != newVal.name)
+	if ((!leaderboard.value.runName) || leaderboard.value.runName == "" || leaderboard.value.runName != newVal.name)
 	{
-		leaderboard.value.ranking.length = 0;
+        if (leaderboard.value.ranking)
+		    leaderboard.value.ranking.length = 0;
 
 		leaderboard.value.runName = newVal.name;
 

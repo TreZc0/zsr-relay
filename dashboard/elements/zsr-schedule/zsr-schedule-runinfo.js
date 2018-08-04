@@ -16,6 +16,8 @@ class zsrScheduleRuninfo extends Polymer.Element {
 		};
 	}
 
+
+		
 	_notesChanged(newVal) {
 		if (newVal) {
 			this.$.notes.querySelector('.value').innerHTML = newVal.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>');
@@ -35,7 +37,7 @@ class zsrScheduleRuninfo extends Polymer.Element {
 		this.srcom = run.srcom;
 		this.racetime = run.racetime;
 		this.order = run.order;
-		this.notes = run.notes;
+		this.notes = "Relay_4";
 		this.coop = run.coop;
 		this.originalValues = run.originalValues;
 	}

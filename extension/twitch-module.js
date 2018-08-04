@@ -291,6 +291,7 @@ nodecg.listenFor("nextRunner", runner => {
 			break;
 		}
 	}, delay+8000); // switch runner 8 seconds after restream caught up.
+	nodecg.sendMessage("dashboardupdate");
 });
 function _askSwitchRunners(teamNr)
 {

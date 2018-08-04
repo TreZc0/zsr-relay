@@ -5,6 +5,7 @@
 	const NAME_FADE_IN_EASE = Power1.easeOut;
 	const NAME_FADE_OUT_EASE = Power1.easeIn;
 	const currentRun = nodecg.Replicant('currentRun');
+	const runners = nodecg.Replicant('runners');
 	const stopwatch = nodecg.Replicant('stopwatch');
 	const leaderboard = nodecg.Replicant('leaderboard');
 	const twitchPlayer = nodecg.Replicant('twitchPlayer');
@@ -566,7 +567,28 @@
 
 		    newVal.ranking.find(finishedRunner => 
 		    {
-		        if (finishedRunner.name == runner.name)
+			let teamname;
+			switch(finishedRunner.name){
+			case "The CoolCat Team":
+				teamname = "Team 1";
+			break;
+			case "The B-Team":
+				teamname = "Team 2";
+			break;
+			case "HD-Daddies":
+				teamname = "Team 3";
+			break;
+			case "HD-Rumble":
+				teamname = "Team 4";
+			break;
+			}
+			const repRunner = runners.value.find(runner => {
+				if (teamname == runner.team) {
+					return true;
+				}
+				return false;
+			});
+		        if (repRunner)
 		        {
 		            if (this.done == false)
 		            {
@@ -588,9 +610,10 @@
 		                    else
 		                        this.forfeit = false;
 
-		                    this.place = finishedRunner.place;
-		                    this.time = finishedRunner.timeFormat;
-
+							this.place = finishedRunner.place;
+							if (finishedRunner.slot < 3)
+		                    	this.time = finishedRunner.timeFormat;
+							else this.time = finishedRunner.fullTimeFormat;
 		                    this.done = true;
 		                    this.audio = false;
 
